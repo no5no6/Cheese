@@ -58,22 +58,19 @@ obj.fn();
 ```
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;答：
 结果为20，原因  
-(1). `obj`对象调用的 `fn()` 方法，此时 `this` 为 `obj` 对象。  
-(2). 因为 `fn()` 方法中 `setTimeout` 使用了箭头函数，所以在 `setTimeout` 中 `this` 还是 `obj` 对象。  
-(3). `obj.a` 为 20。  
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(1). `obj`对象调用的 `fn()` 方法，此时 `this` 为 `obj` 对象。  
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(2). 因为 `fn()` 方法中 `setTimeout` 使用了箭头函数，所以在 `setTimeout` 中 `this` 还是 `obj` 对象。  
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(3). `obj.a` 为 20。  
 
-6. 简述 `Symbol` 类型的用途？
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;答：
-(1). 限制对象 `key` 重复。  
-(2). 私有化对象或类成员中的属性。  
+6. 简述 `Symbol` 类型的用途？  
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;答：  
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(1). 限制对象 `key` 重复。  
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(2). 私有化对象或类成员中的属性。  
 
-7.说说什么是浅拷贝，什么是深拷贝？
-对象：A
-对象：B
-A = B
-
-浅拷贝：内存中 `A` 对象的指针指向 `B` 对象引用的值，如果 `B` 的引用地址的值改变， `A` 也会随之改变。
-深拷贝：内存中 将 `B` 指针引用的值复制一份，创建新的内存地址存储，将 `A` 指向新的内存地址。如果 `B` 的引用地址的值改变， `A` 不会改变。
+7.说说什么是浅拷贝，什么是深拷贝？  
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;答：对象：A ， 对象：B ， A = B  
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;浅拷贝：内存中 `A` 对象的指针指向 `B` 对象引用的值，如果 `B` 的引用地址的值改变， `A` 也会随之改变。  
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;深拷贝：内存中 将 `B` 指针引用的值复制一份，创建新的内存地址存储，将 `A` 指向新的内存地址。如果 `B` 的引用地址的值改变， `A` 不会改变。  
 
 
 
