@@ -18,7 +18,7 @@ if(true) {
   let tmp;
 }
 ```  
-答:结果为语法错误。原因：  
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;答：结果为语法错误。原因：  
 &nbsp;&nbsp;&nbsp;&nbsp;(1). `console` 作用域在 `if` 里, 该作用域里已经用 `let` 声明了 `tmp` 变量，此时该变量存在在暂时性死区中，所以不会读取 `var` 的声明。  
 &nbsp;&nbsp;&nbsp;&nbsp;(2). `let` 声明的变量不会像 `var` 一样有变量提升。  
 
@@ -74,6 +74,45 @@ obj.fn();
 &nbsp;&nbsp;&nbsp;&nbsp;(2). 浏览器为多线程，分别有 `js` 引擎线程、 ui 渲染线程、 浏览器事件触发线程、 http请求线程、 定时触发器线程、 事件轮询处理线程、。  
 &nbsp;&nbsp;&nbsp;&nbsp;(3). `javascript` 单线程执行代码，异步编程是为了解决代码阻塞问题，让需要耗时的任务执行后挂起，继续执行下边的代码。挂起的任务通过 Event Loop 管理，等待耗时任务执行完毕后，将结果返回给 `javascript` 主线程， 主线程调用事先定义的回调函数，完成整个操作。  
 &nbsp;&nbsp;&nbsp;&nbsp;(4). 宏任务和微任务都是都是管理异步回调任务，宏任务管理异步任务有setTimeout、setInterval、setImmediate (Node独有)、requestAnimationFrame (浏览器独有)、I/O、UI rendering (浏览器独有)。微任务管理异步任务有 process.nextTick (Node独有)、Promise、Object.observe、MutationObserver  
+
+9. 将下面异步代码使用 Promise 改进？
+```
+setTimeout(function () {
+  var a = "hello";
+  setTimeout(function () {
+    var b = "lagou";
+    setTimeout(function () {
+      var c = "I ❤ U";
+      console.log(a + b + c);
+    }, 10);
+  }, 10);
+}, 10);
+```  
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;答：  
+```
+  let process = str => {
+    return new Promise((resolve) => {
+      setTimeout(() => {
+        resolve(str)
+      }, 10);
+    });
+  }
+  
+  
+  let main = async () => {
+    let tasks = [
+      process('hellow'),
+      process('lagou'),
+      process('"I ❤ U')
+    ]
+    
+    let array = await Promise.all(tasks);
+    console.log(array.join(''));
+  }
+  
+  main();
+```
+
 
 
 
