@@ -68,6 +68,14 @@ obj.fn();
 &nbsp;&nbsp;&nbsp;&nbsp;浅拷贝：内存中 `A` 对象的指针指向 `B` 对象引用的值，如果 `B` 的引用地址的值改变， `A` 也会随之改变。  
 &nbsp;&nbsp;&nbsp;&nbsp;深拷贝：内存中 将 `B` 指针引用的值复制一份，创建新的内存地址存储，将 `A` 指向新的内存地址。如果 `B` 的引用地址的值改变， `A` 不会改变。  
 
+8. 谈谈你是如何理解JS异步变成的， Event Loop 是做什么的，什么是宏任务，什么是微任务？  
+答：  
+&nbsp;&nbsp;&nbsp;&nbsp;(1).`javascript` 为单线程语言，指的是执行 `js` 代码只有一个线程，`web worker` 可以创建多个线程，但子线程完全由主线程控制，且不能操作dom。  
+&nbsp;&nbsp;&nbsp;&nbsp;(2). 浏览器为多线程，分别有 `js` 引擎线程、 ui 渲染线程、 浏览器事件触发线程、 http请求线程、 定时触发器线程、 事件轮询处理线程、。  
+&nbsp;&nbsp;&nbsp;&nbsp;(3). `javascript` 单线程执行代码，异步编程是为了解决代码阻塞问题，让需要耗时的任务执行后挂起，继续执行下边的代码。挂起的任务通过 Event Loop 管理，等待耗时任务执行完毕后，将结果返回给 `javascript` 主线程， 主线程调用事先定义的回调函数，完成整个操作。  
+&nbsp;&nbsp;&nbsp;&nbsp;(4). 宏任务和微任务都是都是管理异步回调任务，宏任务管理异步任务有setTimeout、setInterval、setImmediate (Node独有)、requestAnimationFrame (浏览器独有)、I/O、UI rendering (浏览器独有)。微任务管理异步任务有 process.nextTick (Node独有)、Promise、Object.observe、MutationObserver  
+
+
 
 
 
