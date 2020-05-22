@@ -111,7 +111,23 @@ setTimeout(function () {
   }
   
   main();
-```
+```  
+
+10. 请简述 `TypeScript` 与 `JavaScript` 之间关系？  
+答：`TypeScript` 是 `JavaScript` 超集。 `TypeScript` 等于 `JavaScript` + `Flow` + ES6+  
+
+11. 请谈谈你所认为的 `TypeScript` 优缺点?  
+答：  
+&nbsp;&nbsp;&nbsp;&nbsp;优点：完全兼容 `js`、 社区丰富、 通过类型注解增加代码可读与维护性。  
+&nbsp;&nbsp;&nbsp;&nbsp;缺点：多了一些新概念需要学习成本、小项目应用会增加编码负担、有些库没有生命文件，需要手动声明再使用。
+
+
+
+
+
+
+
+
 
 
 
