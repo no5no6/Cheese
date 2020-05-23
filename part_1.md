@@ -76,7 +76,7 @@ obj.fn();
 &nbsp;&nbsp;&nbsp;&nbsp;(4). 宏任务和微任务都是都是管理异步回调任务，宏任务管理异步任务有setTimeout、setInterval、setImmediate (Node独有)、requestAnimationFrame (浏览器独有)、I/O、UI rendering (浏览器独有)。微任务管理异步任务有 process.nextTick (Node独有)、Promise、Object.observe、MutationObserver  
 
 9. 将下面异步代码使用 Promise 改进？
-```
+```javascript
 setTimeout(function () {
   var a = "hello";
   setTimeout(function () {
@@ -89,7 +89,7 @@ setTimeout(function () {
 }, 10);
 ```  
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;答：  
-```
+```javascript
   let process = str => {
     return new Promise((resolve) => {
       setTimeout(() => {
@@ -98,13 +98,8 @@ setTimeout(function () {
     });
   }
   
-  
   let main = async () => {
-    let tasks = [
-      process('hellow'),
-      process('lagou'),
-      process('"I ❤ U')
-    ]
+    let tasks = ['hellow', 'lagou', 'I ❤ U'].map(str => process(str))
     
     let array = await Promise.all(tasks);
     console.log(array.join(''));
