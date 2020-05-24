@@ -139,3 +139,25 @@ const reduce = (array, fn, memo) => {
 //   return memo;
 // }, []);
 // console.log(result);
+
+
+// chunk
+// compact
+// difference
+// drop
+// fill
+// findIndex
+// flatten
+// indexOf
+// intersection
+// join
+// pull
+// slice
+// reverse
+// remove
+// uniq
+// union
+// without
+// take
+// tail
+// zip
