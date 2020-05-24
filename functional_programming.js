@@ -96,7 +96,6 @@ const every = (array, fn) => {
 // console.log(result);
 
 
-<<<<<<< HEAD:Functional_programming.js
 // 重点：箭头函数没有子集的 this 和 arguments 如果想用当前的 arguments 必须使用剩余参数表示法
 /**
  * 实现 once 函数
@@ -125,7 +124,3 @@ pay(5);
 
 
 // reduce
-=======
-// once
-// reduce
->>>>>>> 8502e2746d5a1482c77422687cd5c89da824c1e3:functional_programming.js
