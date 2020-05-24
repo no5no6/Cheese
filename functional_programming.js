@@ -112,15 +112,30 @@ const once = (fn) => {
 }
 
 // 测试
-let pay = once((money) => {
-  console.log(money, 'money');
-  console.log(`共计${money}RMB`);
-});
+// let pay = once((money) => {
+//   console.log(money, 'money');
+//   console.log(`共计${money}RMB`);
+// });
 
-pay(5);
-pay(5);
-pay(5);
-pay(5);
+// pay(5);
+// pay(5);
+// pay(5);
+// pay(5);
 
 
 // reduce
+const reduce = (array, fn, memo) => {
+  let result = memo;
+  for (let index = 0; index < array.length; index++) {
+    result = fn(result, array[index], index);
+  }
+  return result;
+}
+
+// 测试
+// let arr = [1, 3, 5, 2, 6, 7];
+// let result = reduce(arr, (memo, item, index) => {
+//   memo.push(item + 1);
+//   return memo;
+// }, []);
+// console.log(result);
