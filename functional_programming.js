@@ -141,7 +141,60 @@ const reduce = (array, fn, memo) => {
 // console.log(result);
 
 
-// chunk
+// slice
+const slice = (array, start = 0, end = array.length) => {
+  let result = [];
+  let startNumber = +start;
+  let endNumber = +end;
+
+  startNumber = isNaN(startNumber) ? 0 : startNumber;
+  endNumber = isNaN(endNumber) ? 0 : endNumber;
+
+  let length = startNumber > endNumber ? 0 : array.length;
+
+  for (let index = 0; index < length; index++) {
+    if (index === endNumber) {
+      break;
+    } else if (index >= startNumber) {
+      result.push(array[index]);
+    }
+  }
+  return result;
+}
+
+
+// 测试
+// let arr = [1, 2, 3, 4, 5, 6, 8, 0];
+// let result = slice(arr, 3, 5);
+// console.log(result)
+
+
+/**
+ * 实现 chunk 函数
+ * @param {*} array 
+ * @param {*} number 
+ * @param {*} fn 
+ */
+const chunk = (array, size = 1) => {
+  size = isNaN(+size) ? 0 : size;
+  const length = Array.isArray(array) ? array.length : 0;
+  if (length === 0) return [];
+
+  let index = 0;
+  let resIndex = 0;
+  const result = new Array(Math.ceil(length / size));
+  while (index < length) {
+    result[resIndex++] = slice(array, index, index += size);
+  }
+
+  return result;
+}
+
+// 测试
+let arr = [1, 2, 3, 5, 2, 7, 5];
+let result = chunk(arr, 1);
+console.log(result);
+
 // compact
 // difference
 // drop
