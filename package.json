@@ -1,0 +1,11 @@
+{
+  "name": "Cheese",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "https://github.com/no5no6/Cheese.git",
+  "author": "no5no6 <work_yuanyang@163.com>",
+  "license": "MIT",
+  "dependencies": {
+    "lodash": "^4.17.15"
+  }
+}
