@@ -43,23 +43,23 @@ let getResult = (r) => {
   return Math.PI * r * r;
 }
 
-let memoize = (fn) => {
-  let cache = {};
-  return (...arg) => {
-    let key = JSON.stringify(arg);
-    cache[key] = cache[key] || fn.apply(fn, arg);
-    return cache[key];
-  }
-}
+// let memoize = (fn) => {
+//   let cache = {};
+//   return (...arg) => {
+//     let key = JSON.stringify(arg);
+//     cache[key] = cache[key] || fn.apply(fn, arg);
+//     return cache[key];
+//   }
+// }
 
-let getResultMemory = memoize(getResult);
-console.log(getResultMemory(2));
-console.log(getResultMemory(2));
-console.log(getResultMemory(4));
-
-// 使用 lodash 缓存函数
-// const _ = require('lodash');
-// let getResultMemory = _.memoize(getResult);
+// let getResultMemory = memoize(getResult);
 // console.log(getResultMemory(2));
 // console.log(getResultMemory(2));
 // console.log(getResultMemory(4));
+
+// 使用 lodash 缓存函数
+const _ = require('lodash');
+let getResultMemory = _.memoize(getResult);
+console.log(getResultMemory(2));
+console.log(getResultMemory(2));
+console.log(getResultMemory(4));
