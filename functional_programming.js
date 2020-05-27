@@ -23,7 +23,7 @@
 // console.log(standard18(20));
 // console.log(standard22(25));
 
-// 通过 lodash curry 函数
+// 通过 lodash curry 函数实现柯里化
 // const _ = require('lodash');
 
 // let getResult = (a, b, c) => {
@@ -37,11 +37,36 @@
 // console.log(fuc(3));
 
 
-// 缓存函数
-let getResult = (r) => {
-  console.log('--enter--');
-  return Math.PI * r * r;
+// 实现 lodash cuurry 函数
+let getResult = (a, b, c) => {
+  return a + b + c;
 }
+
+const curry = (fn) => {
+  const fuc = (...arg) => {
+    if (arg.length < fn.length) {
+      return (...arg_2) => {
+        return fuc(...arg.concat(arg_2));
+      }
+    }
+
+    return fn(...arg);
+  }
+  return fuc;
+}
+
+
+const curryGetResult = curry(getResult);
+console.log(curryGetResult(1, 2, 3));
+console.log(curryGetResult(1)(2)(3));
+console.log(curryGetResult(1, 2)(3));
+
+
+// 缓存函数
+// let getResult = (r) => {
+//   console.log('--enter--');
+//   return Math.PI * r * r;
+// }
 
 // let memoize = (fn) => {
 //   let cache = {};
@@ -58,8 +83,8 @@ let getResult = (r) => {
 // console.log(getResultMemory(4));
 
 // 使用 lodash 缓存函数
-const _ = require('lodash');
-let getResultMemory = _.memoize(getResult);
-console.log(getResultMemory(2));
-console.log(getResultMemory(2));
-console.log(getResultMemory(4));
+// const _ = require('lodash');
+// let getResultMemory = _.memoize(getResult);
+// console.log(getResultMemory(2));
+// console.log(getResultMemory(2));
+// console.log(getResultMemory(4));
