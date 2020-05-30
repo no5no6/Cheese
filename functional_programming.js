@@ -92,35 +92,37 @@
 // 实现 lodash flowRight 函数
 // const _ = require('lodash');
 
-const reverse = arr => arr.reverse();
-const first = arr => arr[0];
-const toUpper = s => s.toUpperCase();
+// const reverse = arr => arr.reverse();
+// const first = arr => arr[0];
+// const toUpper = s => s.toUpperCase();
 
 // const f = _.flowRight(toUpper, first, reverse);
 // console.log(f(['one', 'two', 'three']));
 
 
-const flowRight = (...arg) => {
-  let index = 0;
-  let argRight = arg.reverse();
-  const fuc = (value) => {
-    let result = argRight[index](value);
+// const flowRight = (...arg) => {
+//   let index = 0;
+//   let argRight = arg.reverse();
+//   const fuc = (value) => {
+//     let result = argRight[index](value);
 
-    if (index === argRight.length - 1) {
-      return result;
-    } else {
-      index++;
-      return fuc(result);
-    }
-  }
-  return fuc;
-}
+//     if (index === argRight.length - 1) {
+//       return result;
+//     } else {
+//       index++;
+//       return fuc(result);
+//     }
+//   }
+//   return fuc;
+// }
 
 
 // 借助 reduce lodash flowRight 函数
-const flowRight = (...arg) => value => arg.reverse().reduce((memo, item) => item(memo), value);
+// const flowRight = (...arg) => value => arg.reverse().reduce((memo, item) => item(memo), value);
 
 
-const f = flowRight(toUpper, first, reverse);
-console.log(f(['one', 'two', 'three']));
+// const f = flowRight(toUpper, first, reverse);
+// console.log(f(['one', 'two', 'three']));
+
+
 
