@@ -140,6 +140,195 @@
 // console.log(f('NEVER SAY DIE'))
 
 // lodash fp 函数
-const fp = require('lodash/fp');
-const f = fp.flowRight(fp.join('-'), fp.map(fp.toLower), fp.split(' '))
-console.log(f('NEVER SAY DIE'));
+// const fp = require('lodash/fp');
+// const f = fp.flowRight(fp.join('-'), fp.map(fp.toLower), fp.split(' '))
+// console.log(f('NEVER SAY DIE'));
+
+
+// //  Container (函子)
+// class Container {
+//   static of (value) {
+//     return new Container(value)
+//   }
+
+//   constructor(value) {
+//     this._value = value
+//   }
+
+//   map (fn) {
+//     return Container.of(fn(this._value))
+//   }
+// }
+
+// let result = Container.of(5)
+//   .map(x => x + 2)
+//   .map(x => x * x)
+//   .map(console.log)
+
+
+// MayBe 函子
+// class MayBe {
+//   static of (value) {
+//     return new MayBe(value);
+//   }
+
+//   constructor(value) {
+//     return this._value = value;
+//   }
+
+//   isNull () {
+//     return this._value === null || this._value === undefined
+//   }
+
+//   map (fn) {
+//     return this.isNull() ? MayBe.of(null) : MayBe.of(fn(this._value));
+//   }
+// }
+
+// let result = MayBe.of("hellow")
+//   .map(x => x.toUpperCase())
+//   .map(x => null)
+//   .map(x => x.split(' '))
+
+// console.log(result);
+
+
+// Either 函子
+// class Right {
+//   static of (value) {
+//     return new Right(value);
+//   }
+
+//   constructor(value) {
+//     this._value = value
+//   }
+
+//   map (fn) {
+//     return Right.of(fn(this._value))
+//   }
+// }
+
+// class Left {
+//   static of (value) {
+//     return new Left(value)
+//   }
+
+//   constructor(value) {
+//     this._value = value
+//   }
+
+//   map () {
+//     return this;
+//   }
+// }
+
+// const parseJson = (str) => {
+//   try {
+//     return Right.of(str).map(JSON.parse)
+//   } catch (error) {
+//     return Left.of({ error: error.message })
+//   }
+// }
+
+// let result = parseJson('{"name": 123}').map(x => x.name + 1);
+// console.log(result);
+
+
+// IO 函子
+// const fp = require('lodash/fp')
+
+// class IO {
+//   static of (value) {
+//     return new IO(() => {
+//       return value
+//     })
+//   }
+
+//   constructor(fn) {
+//     this._value = fn
+//   }
+
+//   map (fn) {
+//     return IO.of(fp.flowRight(fn, this._value))
+//   }
+// }
+
+// let result = IO.of(process)
+//   .map(p => p.execPath)
+// console.log(result._value()());
+
+
+// 处理函数式变成异步问题，folktale 库 task 函子
+// const fs = require('fs')
+// const { task } = require('folktale/concurrency/task')
+// const { split, find } = require('lodash/fp')
+
+// let readFile = (filename) => {
+//   return task(({ reject, resolve }) => {
+//     fs.readFile(filename, 'utf-8', (error, data) => {
+//       if (error) reject(error)
+
+//       resolve(data);
+//     })
+//   })
+// }
+
+// readFile('package.json')
+//   .map(split('\n'))
+//   .map(find(x => x.includes('version')))
+//   .run()
+//   .listen({
+//     onRejected: error => {
+//       console.log(error);
+//     },
+//     onResolved: data => {
+//       console.log(data);
+//     }
+//   })
+
+
+// Monad 函子
+const fp = require('lodash/fp')
+const fs = require('fs')
+class IO {
+  static of (value) {
+    return new IO(() => {
+      return value
+    })
+  }
+
+  constrcutor (fn) {
+    this._value = fn
+  }
+
+  map (fn) {
+    return IO.of(fp.flowRight(fn, this._value))
+  }
+
+  join () {
+    return this._value()
+  }
+
+  flatMap (fn) {
+    return this.map(fn).join()
+  }
+}
+
+let readFile = (filename) => {
+  return IO.of(() => {
+    return fs.readFileSync(filename, 'utf-8')
+  })
+}
+
+let print = (x) => {
+  return IO.of(() => {
+    console.log(x);
+    return x;
+  });
+}
+
+let r = readFile('package.json')
+  .flatMap(print)
+  .join()
+
+console.log(r);

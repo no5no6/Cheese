@@ -6,6 +6,7 @@
   "author": "no5no6 <work_yuanyang@163.com>",
   "license": "MIT",
   "dependencies": {
+    "folktale": "^2.3.2",
     "lodash": "^4.17.15"
   }
 }
