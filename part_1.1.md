@@ -1,4 +1,4 @@
-## 练习题
+## javascript基础、typescript练习题
 1. 请说出下列最终的执行结果，并解释为什么？
 ```javascript
 var a = [];
