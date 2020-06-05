@@ -59,21 +59,21 @@ obj.fn();
 
 6. 简述 `Symbol` 类型的用途？  
 答：  
-&nbsp;&nbsp;&nbsp;&nbsp;(1). 限制对象 `key` 重复。  
-&nbsp;&nbsp;&nbsp;&nbsp;(2). 私有化对象或类成员中的属性。  
+ 是一种基本数据类型 （primitive data type）。Symbol()函数会返回symbol类型的值，该类型具有静态属性和静态方法。它的静态属性会暴露几个内建的成员对象；它的静态方法会暴露全局的symbol注册，且类似于内建对象类，但作为构造函数来说它并不完整，因为它不支持语法："new Symbol()"。每个从Symbol()返回的symbol值都是唯一的。一个symbol值能作为对象属性的标识符；这是该数据类型仅有的目的。在ES5中，对象属性名都是字符串容易造成属性名冲突。为了避免这种情况的发生，ES6引入了一种新的原始数据类型Symbol，表示独一无二的值  
+
 
 7. 说说什么是浅拷贝，什么是深拷贝？  
 答：  
 &nbsp;&nbsp;&nbsp;&nbsp;对象：A ， 对象：B ， A = B  
-&nbsp;&nbsp;&nbsp;&nbsp;浅拷贝：内存中 `A` 对象的指针指向 `B` 对象引用的值，如果 `B` 的引用地址的值改变， `A` 也会随之改变。  
-&nbsp;&nbsp;&nbsp;&nbsp;深拷贝：内存中 将 `B` 指针引用的值复制一份，创建新的内存地址存储，将 `A` 指向新的内存地址。如果 `B` 的引用地址的值改变， `A` 不会改变。  
+&nbsp;&nbsp;&nbsp;&nbsp;浅拷贝：复制一层对象的属性，并不包括对象里面的为引用类型的数据，当改变拷贝的对象里面的引用类型时，源对象也会改变。  
+&nbsp;&nbsp;&nbsp;&nbsp;深拷贝：重新开辟一个内存空间，需要递归拷贝对象里的引用，直到子属性都为基本类型。两个对象对应两个不同的地址，修改一个对象的属性，不会改变另一个对象的属性。  
 
-8. 谈谈你是如何理解JS异步变成的， Event Loop 是做什么的，什么是宏任务，什么是微任务？  
+8. 谈谈你是如何理解JS异步编程的， Event Loop 是做什么的，什么是宏任务，什么是微任务？  
 答：  
-&nbsp;&nbsp;&nbsp;&nbsp;(1).`javascript` 为单线程语言，指的是执行 `js` 代码只有一个线程，`web worker` 可以创建多个线程，但子线程完全由主线程控制，且不能操作dom。  
-&nbsp;&nbsp;&nbsp;&nbsp;(2). 浏览器为多线程，分别有 `js` 引擎线程、 ui 渲染线程、 浏览器事件触发线程、 http请求线程、 定时触发器线程、 事件轮询处理线程、。  
-&nbsp;&nbsp;&nbsp;&nbsp;(3). `javascript` 单线程执行代码，异步编程是为了解决代码阻塞问题，让需要耗时的任务执行后挂起，继续执行下边的代码。挂起的任务通过 Event Loop 管理，等待耗时任务执行完毕后，将结果返回给 `javascript` 主线程， 主线程调用事先定义的回调函数，完成整个操作。  
-&nbsp;&nbsp;&nbsp;&nbsp;(4). 宏任务和微任务都是都是管理异步回调任务，宏任务管理异步任务有setTimeout、setInterval、setImmediate (Node独有)、requestAnimationFrame (浏览器独有)、I/O、UI rendering (浏览器独有)。微任务管理异步任务有 process.nextTick (Node独有)、Promise、Object.observe、MutationObserver  
+&nbsp;&nbsp;&nbsp;&nbsp;(1).JavaScript异步编程：异步(async)是相对于同步(sync)而言的，同步就是一件事一件事的执行。只有前一个任务执行完毕，才能执行后一个任务。而异步是不用等待前一个任务执行完成也能够执行。  
+&nbsp;&nbsp;&nbsp;&nbsp;(2). Event Loop：即事件循环，是指浏览器或Node的一种解决javaScript单线程运行时不会阻塞的一种机制，也就是我们经常使用异步的原理。浏览器中的Event Loop指的是Javascript 有一个 main thread 主线程和 call-stack 调用栈(执行栈)，所有的任务都会被放到调用栈等待主线程执行。
+&nbsp;&nbsp;&nbsp;&nbsp;(3). 宏任务（MacroTask）：可以理解是每次执行栈执行的代码就是一个宏任务（包括每次从事件队列中获取一个事件回调并放到执行栈中执行），指script全部代码、setTimeout、setInterval、setImmediate（浏览器暂时不支持，只有IE10支持，具体可见MDN）、I/O、UI Rendering。
+&nbsp;&nbsp;&nbsp;&nbsp;(4). 微任务（MicroTask）：可以理解是在当前 task 执行结束后立即执行的任务。也就是说，在当前task任务后，下一个task之前，在渲染之前，指Process.nextTick（Node独有）、Promise、Object.observe(废弃)、MutationObserver。
 
 9. 将下面异步代码使用 Promise 改进？
 ```javascript
@@ -113,7 +113,7 @@ setTimeout(function () {
 
 11. 请谈谈你所认为的 `TypeScript` 优缺点?  
 答：  
-&nbsp;&nbsp;&nbsp;&nbsp;优点：完全兼容 `js`、 社区丰富、 通过类型注解增加代码可读与维护性。  
+&nbsp;&nbsp;&nbsp;&nbsp;优点：完全兼 `js`、添加类型注解后，IDE 能够提供更好的代码提示、编译阶段发现错误，特别是在对代码进行重构时，更有把握、 社区丰富、 通过类型注解增加代码可读与维护性。  
 &nbsp;&nbsp;&nbsp;&nbsp;缺点：多了一些新概念需要学习成本、小项目应用会增加编码负担、有些库没有生命文件，需要手动声明再使用。
 
 
