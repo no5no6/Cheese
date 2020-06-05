@@ -59,20 +59,19 @@ obj.fn();
 
 6. 简述 `Symbol` 类型的用途？  
 答：  
- 是一种基本数据类型 （primitive data type）。Symbol()函数会返回symbol类型的值，该类型具有静态属性和静态方法。它的静态属性会暴露几个内建的成员对象；它的静态方法会暴露全局的symbol注册，且类似于内建对象类，但作为构造函数来说它并不完整，因为它不支持语法："new Symbol()"。每个从Symbol()返回的symbol值都是唯一的。一个symbol值能作为对象属性的标识符；这是该数据类型仅有的目的。在ES5中，对象属性名都是字符串容易造成属性名冲突。为了避免这种情况的发生，ES6引入了一种新的原始数据类型Symbol，表示独一无二的值  
+&nbsp;&nbsp;&nbsp;&nbsp;是一种基本数据类型 （primitive data type）。Symbol()函数会返回symbol类型的值，该类型具有静态属性和静态方法。它的静态属性会暴露几个内建的成员对象；它的静态方法会暴露全局的symbol注册，且类似于内建对象类，但作为构造函数来说它并不完整，因为它不支持语法："new Symbol()"。每个从Symbol()返回的symbol值都是唯一的。一个symbol值能作为对象属性的标识符；这是该数据类型仅有的目的。在ES5中，对象属性名都是字符串容易造成属性名冲突。为了避免这种情况的发生，ES6引入了一种新的原始数据类型Symbol，表示独一无二的值  
 
 
 7. 说说什么是浅拷贝，什么是深拷贝？  
 答：  
-&nbsp;&nbsp;&nbsp;&nbsp;对象：A ， 对象：B ， A = B  
 &nbsp;&nbsp;&nbsp;&nbsp;浅拷贝：复制一层对象的属性，并不包括对象里面的为引用类型的数据，当改变拷贝的对象里面的引用类型时，源对象也会改变。  
 &nbsp;&nbsp;&nbsp;&nbsp;深拷贝：重新开辟一个内存空间，需要递归拷贝对象里的引用，直到子属性都为基本类型。两个对象对应两个不同的地址，修改一个对象的属性，不会改变另一个对象的属性。  
 
 8. 谈谈你是如何理解JS异步编程的， Event Loop 是做什么的，什么是宏任务，什么是微任务？  
 答：  
 &nbsp;&nbsp;&nbsp;&nbsp;(1).JavaScript异步编程：异步(async)是相对于同步(sync)而言的，同步就是一件事一件事的执行。只有前一个任务执行完毕，才能执行后一个任务。而异步是不用等待前一个任务执行完成也能够执行。  
-&nbsp;&nbsp;&nbsp;&nbsp;(2). Event Loop：即事件循环，是指浏览器或Node的一种解决javaScript单线程运行时不会阻塞的一种机制，也就是我们经常使用异步的原理。浏览器中的Event Loop指的是Javascript 有一个 main thread 主线程和 call-stack 调用栈(执行栈)，所有的任务都会被放到调用栈等待主线程执行。
-&nbsp;&nbsp;&nbsp;&nbsp;(3). 宏任务（MacroTask）：可以理解是每次执行栈执行的代码就是一个宏任务（包括每次从事件队列中获取一个事件回调并放到执行栈中执行），指script全部代码、setTimeout、setInterval、setImmediate（浏览器暂时不支持，只有IE10支持，具体可见MDN）、I/O、UI Rendering。
+&nbsp;&nbsp;&nbsp;&nbsp;(2). Event Loop：即事件循环，是指浏览器或Node的一种解决javaScript单线程运行时不会阻塞的一种机制，也就是我们经常使用异步的原理。浏览器中的Event Loop指的是Javascript 有一个 main thread 主线程和 call-stack 调用栈(执行栈)，所有的任务都会被放到调用栈等待主线程执行。  
+&nbsp;&nbsp;&nbsp;&nbsp;(3). 宏任务（MacroTask）：可以理解是每次执行栈执行的代码就是一个宏任务（包括每次从事件队列中获取一个事件回调并放到执行栈中执行），指script全部代码、setTimeout、setInterval、setImmediate（浏览器暂时不支持，只有IE10支持，具体可见MDN）、I/O、UI Rendering。  
 &nbsp;&nbsp;&nbsp;&nbsp;(4). 微任务（MicroTask）：可以理解是在当前 task 执行结束后立即执行的任务。也就是说，在当前task任务后，下一个task之前，在渲染之前，指Process.nextTick（Node独有）、Promise、Object.observe(废弃)、MutationObserver。
 
 9. 将下面异步代码使用 Promise 改进？
