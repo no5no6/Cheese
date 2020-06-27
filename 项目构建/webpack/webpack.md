@@ -230,7 +230,7 @@
           // webpack.config.js
 
           const path = require('path')
-          import { CleanWebpackPlugin } from 'clean-webpack-plugin'
+          const { CleanWebpackPlugin } = require('clean-webpack-plugin')
 
           module.exports = {
             entry: './src/main.js', // 指定入口文件位置
@@ -294,8 +294,8 @@
           // webpack.config.js
 
           const path = require('path')
-          import { CleanWebpackPlugin } from 'clean-webpack-plugin'
-          import { CopyWebpackPlugin } from copy-webpack-plugin
+          const { CleanWebpackPlugin } = require('clean-webpack-plugin')
+          const CopyWebpackPlugin = require('copy-webpack-plugin')
 
           module.exports = {
             entry: './src/main.js', // 指定入口文件位置
@@ -382,8 +382,9 @@
           // webpack.config.js
 
           const path = require('path')
-          import { cleanWebpackPlugin } from 'clean-webpack-plugin'
-          import HtmlWebpackPlugin from 'html-webpack-plugin'
+          const { CleanWebpackPlugin } = require('clean-webpack-plugin')
+          const CopyWebpackPlugin = require('copy-webpack-plugin')
+          const HtmlWebpackPlugin = require('html-webpack-plugin')
 
           module.exports = {
             entry: './src/main.js', // 指定入口文件位置
@@ -447,6 +448,260 @@
               //new HtmlWebpackPlugin({
                 //filename: 'about.html'
               //})
+              new CopyWebpackPlugin({
+                //'public/**'
+                'public'
+              })
             ]
           }
         ```
+  + ### 提高开发体验
+    - `dev-server` 集成自动编译，自动刷新浏览器等功能 。
+      > 此工具把编译好的代码存储在内存当中，不真正生成编译后文件，节省了磁盘读写时间，提高了编译的效率 
+      + 安装工具 `yarn add dev-server --dev` 。 
+      + 在 `webpack.config.js` 中添加配置。 
+        - 增加 `devServer` 下的 `contentBase` 属性，指定 `devServer` 使用静态文件路径。
+        - 增加 `devServer` 下的 `proxy` 属性，用于代理服务器api请求，解决开发阶段的跨域问题。
+      + `HMR (Hot Module Repalcement)` 热更新配置, `devServer` 中添加 `hot` 属性。再在 `Plugin` 数组中添加 `webpack.HotModuleReplacementPlugin` 实例。
+        > 默认只能实现 css 的热更细， js 和 其他的资源文件，需要使用 `HMR API` 手动写代码实现。 
+        ```javascript
+          // webpack.config.js
+          const webpack = require('webpack')
+          const path = require('path')
+          const { CleanWebpackPlugin } = require('clean-webpack-plugin')
+          const CopyWebpackPlugin = require('copy-webpack-plugin')
+          const HtmlWebpackPlugin = require('html-webpack-plugin')
+          module.exports = {
+            entry: './src/main.js', // 指定入口文件位置
+            output: {
+              filename: 'vendor.js', // 打包后文件名称
+              path: path.join(__dirname, 'output') // 路径必须为绝对路径，所以通过 path 对象的 join 方法把相对路径 output 进行转换
+              //publicPath: 'dist/'  // 注意斜线不能省略
+            },
+            devServer: {
+              contentBase: './public',  //此属性可以是字符串或者数组。指定静态资源位置，用于开发阶段
+              hot: true,
+              proxy: {
+                '/api': {
+                  target: 'https://api.github.com',
+                  pathRewrite: {
+                    '^/api': ''
+                  },// http://localhost:8080 -> https://api.github.com/users
+                  changeOrgin: true // 不适用 localhost:8080 作为请求 github 的主机名
+                }
+              } 
+            },
+            module: {
+              rules: [
+                {
+                  test: /js$/,
+                  use: {
+                    loader: 'babel-loader',
+                    options: {
+                      presets: ['@/babel/preset-env']
+                    }
+                  }
+                },
+                {
+                  tset: /.css$/,  // 匹配文件规则
+                  use: [          // 匹配文件使用的的 loader 插件
+                  'style-loader',
+                  'css-loader'
+                  ]
+                },
+                //{
+                  //test: /.png$/,
+                  //use: ['file-loader']
+                //}
+                {
+                  test: /.png$/,
+                  use: {
+                    loader: 'url-loader',
+                    options: {
+                      limit: 10 * 1024  // 10kb
+                    }
+                  }
+                },
+                {
+                  test: /.html$/,
+                  use : {
+                    loader: 'html-loader',
+                    options: {
+                      attrs: ['img:src', 'a:href'] // 需要在 html 中转换的属性添加到此处
+                    }
+                  }
+                }
+              ]
+            },
+            plugins: [
+              new CleanWebpackPlugin(),
+              new HtmlWebpackPlugin({
+                title: '我是 html 标题', // html 中修改标题
+                meta: {
+                  viewport: 'width=device-width' //html 中添加标签
+                },
+                template: './src/index.html' // 指定生成 html 使用模板
+              }),
+              // 创建多个 html 就增加 多个 HtmlWebpackPlugin 实例对象
+              //new HtmlWebpackPlugin({
+                //filename: 'about.html'
+              //})
+              //new CopyWebpackPlugin({
+                //'public/**'
+                //'public'
+              //}),  // 此方法只在正式环境的配置文件中才需要
+              new webpack.HotModuleReplacementPlugin()
+            ]
+          }
+        ```
+    - 配置 `source-map` 。
+      + 在 `webpack.config.js` 中添加 `devtool` 属性配置 。
+        > + `source-map` 有多重类型的配置，适应不同场景，开发环境一般使用 `cheap-module-eval-source-map`, 输出为未通过 `Loader` 转换的代码。
+        > + 正式环境一般可使用 `none` ，就是不输出 `source-map` 或者 `nosources-source-map` ,只输出报错行号，不输出源码。
+        ```javascript
+          // webpack.config.js
+
+          const path = require('path')
+          const { CleanWebpackPlugin } = require('clean-webpack-plugin')
+          const CopyWebpackPlugin = require('copy-webpack-plugin')
+          const HtmlWebpackPlugin = require('html-webpack-plugin')
+
+          module.exports = {
+            entry: './src/main.js', // 指定入口文件位置
+            output: {
+              filename: 'vendor.js', // 打包后文件名称
+              path: path.join(__dirname, 'output') // 路径必须为绝对路径，所以通过 path 对象的 join 方法把相对路径 output 进行转换
+              //publicPath: 'dist/'  // 注意斜线不能省略
+            },
+            devtool: 'source-map',
+            devServer: {
+              contentBase: './public',  //此属性可以是字符串或者数组。指定静态资源位置，用于开发阶段
+              hot: true,
+              proxy: {
+                '/api': {
+                  target: 'https://api.github.com',
+                  pathRewrite: {
+                    '^/api': ''
+                  },// http://localhost:8080 -> https://api.github.com/users
+                  changeOrgin: true // 不适用 localhost:8080 作为请求 github 的主机名
+                }
+              } 
+            },
+            module: {
+              rules: [
+                {
+                  test: /js$/,
+                  use: {
+                    loader: 'babel-loader',
+                    options: {
+                      presets: ['@/babel/preset-env']
+                    }
+                  }
+                },
+                {
+                  tset: /.css$/,  // 匹配文件规则
+                  use: [          // 匹配文件使用的的 loader 插件
+                  'style-loader',
+                  'css-loader'
+                  ]
+                },
+                //{
+                  //test: /.png$/,
+                  //use: ['file-loader']
+                //}
+                {
+                  test: /.png$/,
+                  use: {
+                    loader: 'url-loader',
+                    options: {
+                      limit: 10 * 1024  // 10kb
+                    }
+                  }
+                },
+                {
+                  test: /.html$/,
+                  use : {
+                    loader: 'html-loader',
+                    options: {
+                      attrs: ['img:src', 'a:href'] // 需要在 html 中转换的属性添加到此处
+                    }
+                  }
+                }
+              ]
+            },
+            plugins: [
+              new CleanWebpackPlugin(),
+              new HtmlWebpackPlugin({
+                title: '我是 html 标题', // html 中修改标题
+                meta: {
+                  viewport: 'width=device-width' //html 中添加标签
+                },
+                template: './src/index.html' // 指定生成 html 使用模板
+              }),
+              // 创建多个 html 就增加 多个 HtmlWebpackPlugin 实例对象
+              //new HtmlWebpackPlugin({
+                //filename: 'about.html'
+              //}),
+              //new CopyWebpackPlugin({
+                //'public/**'
+                //'public'
+              //}),  // 此方法只在正式环境的配置文件中才需要
+              new webpack.HotModuleReplacementPlugin()
+            ]
+          }
+        ```
+  + webpack 不同环境不同配置实现方式。
+    - 配置文件根据环境不同导出不同配置。
+      + webpack 的配置文件还支持导出一个函数，函数当中返回所需要的配置对象。 
+        ```javascript
+          const { CleanWebpackPlugin } = require('clean-webpack-plugin')
+          const CopyWebpackPlugin = require('copy-webpack-plugin')
+        
+          /**
+          * @env 通过 cli 传递的环境参数
+          * @cli 运行过程传递的所有参数
+          */
+          export.exports = (env, argv) => {
+            // 此变量假设涵盖开发模式下的配置
+            const config = {}
+
+            if(env === 'production') {
+              config.mode = 'production'
+              config.devtool = false
+              config.plugins = [
+                ...config.plugins,
+                new CleanWebpackPlugin(),
+                new CopyWebpackPlugin(['public'])
+              ]
+            }
+
+            return config
+          }
+        ``` 
+    - 一个环境对应一个配置文件。 
+      + 增加 3 个 webpack 配置文件。 
+        - 增加 `webpack.common.js` 用于存储基础配置。
+        - 增加 `webpack.dev.js` 用于扩展开发环境配置。
+        - 增加 `webpack.prod.js` 用于扩展正式环境配置。 
+      + `webpack.prod.js` 文件编写。
+        - 安装合并工具 `yarn add webpack-merge --dev` 。
+        - `webpack.prod.js`
+          > 使用 `webpack-merge` ，不适用 `Object.assign()` 原因为 如果键对应的值是数组或者对象 `Object.assign()` 只能覆盖，不能追加。
+         ```javascript
+          const common = require('./webpack.common.js')
+          const merge = require('webpack-merge')
+          const { CleanWebpackPlugin } = require('clean-webpack-plugin')
+          const CopyWebpackPlugin = require('copy-webpack-plugin')
+        
+          /**
+          * @env 通过 cli 传递的环境参数
+          * @cli 运行过程传递的所有参数
+          */
+          export.exports = merge(common, {
+            mode: 'production',
+            plugins: [
+              new CleanWebpackPlugin(),
+              new CopyWebpackPlugin(['public'])
+            ]
+          })
+        ```           
