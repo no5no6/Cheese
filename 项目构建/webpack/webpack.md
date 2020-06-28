@@ -12,7 +12,7 @@
 ## 使用 （webpack 4.0 之后支持零配置打包）
   + `yarn webpack`
 
-## 工作模式 （webpack 4.0 z之后支持）
+## 工作模式 （webpack 4.0 之后支持）
   + 在 `webpack.config.js` 添加 `mode` 属性。
   + 预设了 3 中模式 `development`、 `production`、 `node` 。
 
@@ -678,14 +678,14 @@
             return config
           }
         ``` 
-    - 一个环境对应一个配置文件。 
-      + 增加 3 个 webpack 配置文件。 
-        - 增加 `webpack.common.js` 用于存储基础配置。
-        - 增加 `webpack.dev.js` 用于扩展开发环境配置。
-        - 增加 `webpack.prod.js` 用于扩展正式环境配置。 
-      + `webpack.prod.js` 文件编写。
-        - 安装合并工具 `yarn add webpack-merge --dev` 。
-        - `webpack.prod.js`
+    + 一个环境对应一个配置文件。 
+      - 增加 3 个 webpack 配置文件。 
+        + 增加 `webpack.common.js` 用于存储基础配置。
+        + 增加 `webpack.dev.js` 用于扩展开发环境配置。
+        + 增加 `webpack.prod.js` 用于扩展正式环境配置。 
+      - `webpack.prod.js` 文件编写。
+        + 安装合并工具 `yarn add webpack-merge --dev` 。
+        + `webpack.prod.js`
           > 使用 `webpack-merge` ，不适用 `Object.assign()` 原因为 如果键对应的值是数组或者对象 `Object.assign()` 只能覆盖，不能追加。
          ```javascript
           const common = require('./webpack.common.js')
