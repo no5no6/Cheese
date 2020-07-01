@@ -79,6 +79,8 @@
     > 执行 `lint` 命令的时候，注意使用的工具是否安装，可以使用 `vue-cli-service lint`、 `npm lint` 等等。
 + 配置 es-lint 
   - 安装依赖模块。
+    + `yarn add eslint --dev` 。 
+    + `yarn add babel-eslint --dev` 。 
     + `yarn add eslint-config-standard --dev`。
     + `yarn add eslint-config-vue-standard --dev`。 （可选。用于 vue 文件校验）
   - 创建 `.eslintrc.js` 文件。
@@ -91,7 +93,11 @@
         "globals": {
           "echarts": true // 全局变量
         },
-        "extends": ["vue-standard"], // 继承的风格，继承一些共享配置
+        // 继承的风格，继承一些共享配置
+        "extends": [
+          "plugin:vue/essential",
+          "standard"
+        ], 
         "ignorePatterns": ["node_modules/**", "dist/**"], // 需排除的文件
         // 规则
         "rules": {
@@ -107,5 +113,11 @@
       }
     ```
     > 可使用 `yarn --init` 初始化此文件。
+  - 如果编辑器使用了 `vscode-icons` 这个插件， `.vue` 后缀名的文件图标会变成 `html` 。需要在 `setting.json` 增加以下配置。
+    ```json
+      "vsicons.associations.files": [
+        { "icon": "vue", "extensions": ["vue"], "format": "svg" }
+      ]
+    ``` 
 
   
