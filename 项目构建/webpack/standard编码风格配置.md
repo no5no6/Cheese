@@ -10,7 +10,7 @@
 + 创建 `.eslintrc.js` 文件。
     ```json
       module.exports = {
-        "root": true,  // 限制 eslint 查找配置文件，加上此选项， eslint 一旦找到 root 为 true 的配置文件，便会停止继续虚招
+        "root": true,  // 限制 eslint 查找配置文件，加上此选项， eslint 一旦找到 root 为 true 的配置文件，便会停止继续寻找
         "env": {
           "node": true  // 运行环境。对应环境枚举配置 https://eslint.org/docs/user-guide/configuring#specifying-environments
         },
