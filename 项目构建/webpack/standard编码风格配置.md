@@ -36,7 +36,7 @@
         }
       }
     ```
-    > 可使用 `yarn --init` 初始化此文件, 在此基础修改。  
+    > 可使用 `yarn eslint --init` 初始化此文件, 在此基础修改。  
     > 代码如果想跳过 `eslint` 的检查，可在该行代码后增加魔法注释，如：`// eslint-disable-line` 。
 
 ## VS Code 配置
@@ -85,7 +85,7 @@
         }
       }
     ```
-    > 如果想保留外侧手动可以 lint 检查，可以将 `pre-commit` 的值配置为 `package.json` 中 `script` 对应的命令。如： `npm run precommit-lint` 。
+    > 如果想保留手动 lint 检查，可以将 `pre-commit` 的值配置为 `package.json` 中 `script` 对应的命令。如： `npm run precommit-lint` 。
   - `package.json` 中增加 `lint-staged` 配置。
     ```json
       "lint-staged": {
