@@ -28,7 +28,7 @@
       module.exports = {
         entry: './src/main.js', // 指定入口文件位置
         output: {
-          filename: 'vendor.js' // 打包后文件名称
+          filename: 'vendor.js', // 打包后文件名称
           path: path.join(__dirname, 'output') // 路径必须为绝对路径，所以通过 path 对象的 join 方法把相对路径 output 进行转换
         }
       }
@@ -52,7 +52,7 @@
               module: {
                 rules: [
                   {
-                    tset: /.css$/,  // 匹配文件规则
+                    test: /.css$/,  // 匹配文件规则
                     use: [          // 匹配文件使用的的 loader 插件
                     'style-loader',
                     'css-loader'
