@@ -87,7 +87,7 @@
             module: {
               rules: [
                 {
-                  tset: /.css$/,  // 匹配文件规则
+                  test: /.css$/,  // 匹配文件规则
                   use: [          // 匹配文件使用的的 loader 插件
                   'style-loader',
                   'css-loader'
@@ -138,7 +138,7 @@
                   }
                 },
                 {
-                  tset: /.css$/,  // 匹配文件规则
+                  test: /.css$/,  // 匹配文件规则
                   use: [          // 匹配文件使用的的 loader 插件
                   'style-loader',
                   'css-loader'
@@ -188,7 +188,7 @@
                   }
                 },
                 {
-                  tset: /.css$/,  // 匹配文件规则
+                  test: /.css$/,  // 匹配文件规则
                   use: [          // 匹配文件使用的的 loader 插件
                   'style-loader',
                   'css-loader'
@@ -223,7 +223,7 @@
   + ### Plugin  
     - 清除打包目录插件。
       + 安装 `yarn add clean-webpack-plugin --dev`。
-      + 引入 `import { CleanWebpackPlugin } from 'clean-webpack-plugin'`    
+      + 引入 `const { CleanWebpackPlugin } = require('clean-webpack-plugin')`    
         > 多数插件导出都为一个类型，直接用这个类型创建对象实例使用 
       + 在 `webpack.config.js` 中添加配置。 
         ```javascript
@@ -251,7 +251,7 @@
                   }
                 },
                 {
-                  tset: /.css$/,  // 匹配文件规则
+                  test: /.css$/,  // 匹配文件规则
                   use: [          // 匹配文件使用的的 loader 插件
                   'style-loader',
                   'css-loader'
@@ -288,7 +288,7 @@
         ```  
     - 复制静态文件
       + 安装 `yarn add copy-webpack-plugin --dev`。
-      + 引入 `import { CopyWebpackPlugin } from copy-webpack-plugin` 。
+      + 引入 `const CopyWebpackPlugin = require('copy-webpack-plugin')` 。
       + 在 `webpack.config.js` 中添加配置。 
         ```javascript
           // webpack.config.js
@@ -316,7 +316,7 @@
                   }
                 },
                 {
-                  tset: /.css$/,  // 匹配文件规则
+                  test: /.css$/,  // 匹配文件规则
                   use: [          // 匹配文件使用的的 loader 插件
                   'style-loader',
                   'css-loader'
@@ -349,8 +349,12 @@
             plugins: [
               new CleanWebpackPlugin(),
               new CopyWebpackPlugin({
-                //'public/**'
-                'public'
+                patterns: [
+                  {
+                    from: path.join(__dirname, '/public'),
+                    to: path.join(__dirname, '/dist')
+                  }
+                ]
               })
             ]
           }
@@ -405,7 +409,7 @@
                   }
                 },
                 {
-                  tset: /.css$/,  // 匹配文件规则
+                  test: /.css$/,  // 匹配文件规则
                   use: [          // 匹配文件使用的的 loader 插件
                   'style-loader',
                   'css-loader'
@@ -503,7 +507,7 @@
                   }
                 },
                 {
-                  tset: /.css$/,  // 匹配文件规则
+                  test: /.css$/,  // 匹配文件规则
                   use: [          // 匹配文件使用的的 loader 插件
                   'style-loader',
                   'css-loader'
