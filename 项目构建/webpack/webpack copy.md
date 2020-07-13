@@ -1,4 +1,4 @@
-# 通过 Webpack 实现 简单的 vue-cli
+# 模块化打包 vue 项目
 
 ## 配置
   + ### webpack.common.js
@@ -150,7 +150,7 @@
               // ...省略代码
               new HtmlWebpackPlugin({
                 template: './public/index.html',
-                title: 'My vue-cli'
+                title: 'My Project'
               }),
               new webpack.DefinePlugin({
                 BASE_URL: '"/"'
