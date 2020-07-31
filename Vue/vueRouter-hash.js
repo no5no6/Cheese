@@ -49,10 +49,12 @@ export default class VueRouter {
   // 3. initEvent 监听浏览器地址变化，hashchange事件。
   initEvent() {
     window.addEventListener('hashchange', () => {
-      const {path, query, hashPath} = getHashParameters()
-      this.data.path = path
-      this.data.current = hashPath
-      this.data.query = query
+      let reg = location.hash.includes('?') ? /^\#(.*)\?(.*)/ : /^\#(.*)/
+      reg.test(location.hash)
+
+      this.data.path = RegExp.$1
+      this.data.query = RegExp.$2
+      this.data.current = location.hash
     })
   }
 
@@ -67,8 +69,7 @@ export default class VueRouter {
   initComponents() {
     _Vue.component('router-link', {
       props: {
-        to: String,
-        query: String
+        to: String | Object,
       },
       render(h) {
         return h('a', {
@@ -82,16 +83,40 @@ export default class VueRouter {
       },
       methods: {
         clickRouter(event) {
-          const hashPath = `/#${this.to}`
-          history.pushState({}, '', `/#${this.to}`)
-          console.log(' this.options',  this.options)
+          let path = ''
+          let query = ''
+
+          // 解析 to 参数 是字符串还是对象
+          if(this.to && this.to.path) {
+            path = this.to.path
+            query = this.to.query || query
+          }else{
+            path = this.to || path
+          }
+          
+          const queryStr = this.getUrlParameters(query)
+          let hashPath = `/#${path}`
+    
+          if(queryStr) hashPath += `?${queryStr}`
+          console.log(hashPath, 'hashPathhashPathhashPath', queryStr)
+
+          history.pushState({}, '', hashPath)
 
           this.$router.data.current = hashPath
-          this.$router.data.path = this.to
-          this.$router.data.query = this.query || ''
+          this.$router.data.path = path
+          this.$router.data.query = query
 
           // 阻止事件冒泡，解决点击页面刷新问题
           event.preventDefault()
+        },
+        getUrlParameters(queryObject) {
+          const keyArray = Object.keys(queryObject) 
+          console.log(keyArray, 'ksksksksksksksks')
+          return keyArray.reduce((memo, key, index) => {
+            if(index !== 0) memo += '&'
+            memo += `${key}=${queryObject[key]}`
+            return memo
+          }, '')
         }
       }
     })
@@ -111,11 +136,5 @@ export default class VueRouter {
     this.initEvent()
     this.createRouteMap()
     this.initComponents()
-  }
-
-  // 获取 url hash 值和参数。
-  getHashParameters() {
-    /^\#(.*)\?(.*)/.test(location.hash)
-    return {path: RegExp.$1, query: RegExp.$2, hashPath: location.hash}
   }
 }
