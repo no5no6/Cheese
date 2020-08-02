@@ -98,7 +98,6 @@ export default class VueRouter {
           let hashPath = `/#${path}`
     
           if(queryStr) hashPath += `?${queryStr}`
-          console.log(hashPath, 'hashPathhashPathhashPath', queryStr)
 
           history.pushState({}, '', hashPath)
 
@@ -111,7 +110,6 @@ export default class VueRouter {
         },
         getUrlParameters(queryObject) {
           const keyArray = Object.keys(queryObject) 
-          console.log(keyArray, 'ksksksksksksksks')
           return keyArray.reduce((memo, key, index) => {
             if(index !== 0) memo += '&'
             memo += `${key}=${queryObject[key]}`
