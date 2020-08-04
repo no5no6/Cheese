@@ -1,0 +1,9 @@
+{
+  "name": "snabbdom-demo",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "dependencies": {
+    "snabbdom": "^1.0.1"
+  }
+}
