@@ -59,7 +59,7 @@ const add = () => {
   const {rank, title, desc} = originalData[Math.floor(Math.random() * 10)]
   let newNode = { rank: count++, title, desc }
   renderData.push(newNode)
-  console.log(newNode, renderData, '==========')
+
   vnode = patch(vnode, render(renderData))
 }
 
