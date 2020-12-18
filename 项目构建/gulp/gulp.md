@@ -8,7 +8,7 @@
   - 引入 `gulp` 中的方法 。
     ```javascript
       // 引入 gulp 模块中的方法
-      const { src, dest, parallel, series, watch } = require('gulp'
+      const { src, dest, parallel, series, watch } = require('gulp')
     ```
     > + src 用于读取文件。  
     > + dest 用于输出文件。  
