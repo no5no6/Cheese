@@ -82,7 +82,19 @@
               - 触发 actived 钩子函数。
               - 触发 updated 钩子函数。
               
-              
-+ ## 虚拟 DOM 中 Key 的作用。
 
++ ## 虚拟 DOM 中 Key 的作用。
+  - 在执行 diff 算法对比新旧 dom 的时候，作为唯一标记，在节点变化的时候，根据此唯一标记比对新旧节点，如果节点 key 相同，且没变化，就不用对 dom 进行任何操作。
+  - 原理是vue在patch过程中通过key可以精准判断两个节点是否是同一个，从而避免频繁更新不同元素，使得整个patch过程更加高效，减少dom操作量，提高性能。
 + ## Vue 中模板编译的过程。
+  - 调用 compileToFunctions 方法。
+    + 先从缓存中加载编译好的 render 函数。
+    + 缓存中如果没有， 调用 compile 函数。
+      - 合并 options。
+      - 调用 baseCompile 函数。
+        + 调用 parse 方法，把模板转换成 ast 对象（抽象语法树）。
+        + 调用 optimize 方法，检测到静态子树，设置为静态，静态节点不需要每次重绘。
+        + patch 过程会跳过静态根节点。
+        + 调用 generate 函数，将 AST tree 生成js，创建代码。
+    + 调用 createFunction 函数，继续把字符串代码转换成函数。
+    + render 函数和 staticRenderFns 初始化完毕，挂载到 Vue 实例的 options 对应的属性中。
