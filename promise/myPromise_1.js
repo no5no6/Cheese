@@ -18,40 +18,39 @@
 const PENDING = 'pending'  // 等等带
 const FULFILLED = 'fulfilled'  // 成功
 const REJECTED = 'rejected'  // 失败
-class MyPromise {
-  constructor(executor) {
-    try {
-       executor(this.resolve, this.reject)
-    } catch (error) {
-
+  class MyPromise {
+    constructor(executor) {
+      try {
+         executor(this.resolve, this.reject)
+      } catch (error) {
+        
+      }
     }
-  }
       
-  status= PENDING
-  value = undefined  // 成功结果
-  reason = undefined  // 失败原因
+    status: PENDING
+    value: undefined  // 成功结果
+    reason: undefined  // 失败原因
 
-  resolve = value => {
-    if(this.status === PENDING ) {
-      this.status = FULFILLED
-      this.value = value
+    resolve = value => {
+      if(this.status === PENDING ) {
+        this.status = FULFILLED
+        this.value = value
     }
-  }
 
-  reject = reason => {
-    if(this.status === PENDING) {
-      this.status === REJECTED
-      this.reason = reason
+    reject = reason => {
+      if(this.status === PENDING) {
+        this.status === REJECTED
+        this.reason = reason
+      }
     }
-  }
 
-  then (successCallback, failCallback) {        
-    if(this.status === FULFILLED) {
-      successCallback(this.value)
-    }else {
-      failCallback(this.reason)
+    then (successCallback, failCallback) {        
+      if(this.status === FULFILLED) {
+        successCallback(this.value)
+      }else {
+        failCallback(this.reason)
+      }
     }
-  }
-}
+ }
 
-module.exports = MyPromise
+ module.exports = MyPromise
