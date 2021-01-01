@@ -14,6 +14,11 @@
  *  7. then 方法可以被链式调用，后一个 then 的参数是前一个 then 返回的。
  *  8. then 方法内部判断 Promise 状态，如果成功，调用成功回调并传递结果，如果失败调用失败回调并传入失败原因。
  *  9. then 被定义在原型对象上
+ *  10. 处理 Promise 异步执行，需先在 then 把成功和失败回调函数存储起来，在使用者调用 resolve 或者 reject 的时候再执行成功和失败回调函数。
+ *  11. 处理 同一个 Promise 对象多次调用 then 的情况：
+ *    （1）同步情况， then 方法直接根据状态执行成功或者失败函数。
+ *    （2）异步情况，需要把成功和失败的函数都储存到数组中，呆状态改变时候调用对应的函数。
+ *  12. 实现 then 方法的链式调用
  */
 const PENDING = 'pending'  // 等等带
 const FULFILLED = 'fulfilled'  // 成功
@@ -30,11 +35,15 @@ class MyPromise {
   status= PENDING
   value = undefined  // 成功结果
   reason = undefined  // 失败原因
-
+  successCallback = [] // 成功回调函数
+  failCallback = []  // 失败回调函数
+  
   resolve = value => {
     if(this.status === PENDING ) {
       this.status = FULFILLED
       this.value = value
+      // this.successCallback && this.successCallback()
+      while(this.successCallback.length) this.successCallback.shift()(this.value)
     }
   }
 
@@ -42,15 +51,24 @@ class MyPromise {
     if(this.status === PENDING) {
       this.status === REJECTED
       this.reason = reason
+      // this.failCallback && this.failCallback()
+      while(this.failCallback.length) this.failCallback.shift()(this.reason)
     }
   }
 
   then (successCallback, failCallback) {        
-    if(this.status === FULFILLED) {
-      successCallback(this.value)
-    }else {
-      failCallback(this.reason)
-    }
+    let promise2 =  new MyPromise(resolve => {
+       if(this.status === FULFILLED) {
+         let returnValue = successCallback(this.value)
+         resolve(returnValue)
+       }else if (this.status === REJECTED) {
+         failCallback(this.reason)
+       }else {
+         this.successCallback.push(successCallback)
+         this.failCallback.push(failCallback) 
+       }
+    }) 
+    return promise2
   }
 }
 
