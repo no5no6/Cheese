@@ -1,5 +1,5 @@
 /**
- *  模拟 uex 基础功能V
+ *  模拟 Vuex 基础功能
  *  1. 定义插件的 install 方法。
  *    (1) 缓存 Vue 对象
  *    (2) 跟模拟 vueRouter 类似。如果让每个文件都能 this.$store 可以访问，需要混入 beforeCreate 尚明周期
