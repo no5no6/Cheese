@@ -48,6 +48,24 @@
     - 一组基于函数的 API
     - 可以更灵活组织组件的逻辑
   
+  + Vue 3.0 支持 `Options API` 和 `Composition API`
+
   + 对比图  
 
     ![compositionAPI 对比](compositionAPI.jpg)
+
+三. Vue-cli 与 Vite
+  + Vue-cli
+    - 开发模式下必须打包后才可运行
+    - 打包工具为 `webpack`
+
+  + Vite
+    - 快速冷启动
+      > 使用浏览器原生支持的 `es modules` 加载模块，通过 `import` 导入模块。支持 `es modules` 的现代浏览器通过 `<script type='modules'></script>` 方式加载模块代码。因不需要打包项目，所以在开发模式下基本是秒开的。
+    - 按需编译
+      > 通过启动的服务器拦截浏览器发送的请求，浏览器会像服务器发送请求获取响应模块 `vite` 会对浏览器不识别的模块进行处理。如加载 `.vue` 扩展名的文件，`vite` 会对其做编译，并把结果返回给浏览器。
+    - 模块热更新
+      > 热更新的性能与模块总数无关
+
+    - 生产环境下使用 `rollup` 打包
+      > 基于 `es modules` 打包，不需要一些辅助函数（如 `babel` 转换 `import` 为 'require'）。现代浏览器都已经支持了 `es modules` 加载模块。
