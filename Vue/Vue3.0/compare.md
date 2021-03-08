@@ -1,4 +1,6 @@
 # Vue 3.0 与 Vue 2.0 对比
+  > + [Vue Function-based API RFC](https://zhuanlan.zhihu.com/p/68477600)（老版本，具有参考价值）  
+  > + [最新 RFC](https://v3.vuejs.org/guide/composition-api-introduction.html#reactive-variables-with-ref)
 一. Vue 与 Vue 3.0
   + 响应式系统升级
     - vue 2.0 中 响应式系统的核心是 `defineProperty`，在初始化的时会遍历 `data` 中所有成员，通过 `defineProperty` 把对象的属性转换成 `setter` 和 `getter`，如果对象的属性也是对象的话，需要递归遍历处理每一个子对象的属性。  
