@@ -1,4 +1,7 @@
 # Vue 3.0 响应式 API 理解
++ ## 响应式数据
+  - 响应式数据，就是当数据对象改变时（ `set` ），有用到数据对象的地方，都会自动执行响应的逻辑。比如 `effect/computed/watch` 等 `js api` 用到数据对象，则执行对应的回调函数。而视图 `view` 用到数据对象时，则重新 `vnode diff`，最后自动进行dom更新（即视图更新）。  
+  - 而Vue3响应式源码跟 `Vue2.x` 源码流程基本一致，依然是利用在使用响应式数据时，执行数据的 `get` 方法，收集相关的依赖（依赖可以是回调函数，如 `effect/computed` ，也可以是视图自动更新）；在数据进行变化的时候，执行数据的 `set` 方法，把收集的依赖都依次执行。
 + ## 响应式基础 API
   - ### reactive
     + 重新给 `reactive` 对象赋值，丢失响应式
@@ -261,22 +264,42 @@
 
   - ### customRef
     + 创建一个自定义 `ref`，用户手动操作 `track` 和 `trigger`
-      - `track` 函数用来跟踪收集依赖 `deps`（一般有 `effect` 、 `computed` 、 `watch` 的回调函数）
-      - `trigger` 函数用来通知 `deps` , 通知依赖此状态的对象更新
-        -  执行流程：`effect/computed` 函数执行 -> 代码响应式数据，调用到get,依赖收集 -> 当有 `set` 时，依赖集更新
-        ```javascript 
-          const count = reactive({ num: 0 })
-          // effect默认没带lazy参数，先会执行effect
-          effect(() => {
-            // effect用到对应响应式数据时，count.num get就已经收集好了该effect依赖
-            // 同理，使用computed api时，
-            console.log(count.num)
-          })
-          // computed依赖于count.num,也意味着该computed是count.num的依赖项
-          const computedNum = computed(() => 2 * count.num)
-          count.num = 7
-        ```
+    ```html
+      <input v-model="text" />
+    ```
+    ```javascript
+      function useDebouncedRef(value, delay = 200) {
+        let timeout
+        return customRef((track, trigger) => {
+          return {
+            get() {
+              track()
+              return value
+            },
+            set(newValue) {
+              clearTimeout(timeout)
+              timeout = setTimeout(() => {
+                value = newValue
+                trigger()
+              }, delay)
+            }
+          }
+        })
+      }
+
+      export default {
+        setup() {
+          return {
+            text: useDebouncedRef('hello')
+          }
+        }
+      }
+    ```
+    + 常见使用场景，防抖操作
+    + 通过 `track` 函数记录需要追踪的依赖， 通过 `trigger` 函数通知依赖更新。（详见下方 `track 和 trigger` 内容）
+
   - ### shallowRef
+    + 创建一个跟踪自身 .value 变化的 ref，但不会使其值也变成响应式的。
   - ### triggerRef
 
 + ## Computed 和 Watch
@@ -284,7 +307,29 @@
   - ### watchEffect
   - ### watch
 
++ ## track 和 trigger
+    - `track` 函数用来跟踪收集依赖 `deps`（一般有 `effect` 、 `computed` 、 `watch` 的回调函数）
+    - `trigger` 函数用来通知 `deps` , 通知依赖此状态的对象更新
+    - 示例：  
+      执行流程：`effect/computed` 函数执行 -> 代码响应式数据，调用到get,依赖收集 -> 当有 `set` 时，依赖集更新  
+
+      ```javascript 
+        const count = reactive({ num: 0 })
+        // watchEffect 默认没带lazy参数，先会执行effect
+        watchEffect(() => {
+          // watchEffect 用到对应响应式数据时，count.num get就已经收集好了该effect依赖
+          // computed api 同理，
+          console.log(count.num)
+        })
+        // computed依赖于count.num,也意味着该computed是count.num的依赖项
+        const computedNum = computed(() => 2 * count.num)
+        count.num = 7
+      ```
+
+      > 使用 `effect` 或 `computed api` 时，里面使用了 `count.num` ，意味着这个 `effect` 依赖于 `count.num` 。当 `count.num set` 改变值时，需要通知该 `effect` 去执行。创建 `effect` 的回调函数时进行依赖��。如果回调函数中用到响应式数据（意味着会去执行 `get` 函数），则同步这个 `effect` 到响应式数据（这里是 `count.num` ）的依赖集中
+
 > 参考：
 > + https://v3.cn.vuejs.org/api/reactivity-api.html
 > + https://lq782655835.github.io/blogs/vue/vue3-code-2.reactive.html#_3-track-trigger
 > + https://zhuanlan.zhihu.com/p/146097763
+> + https://lq782655835.github.io/blogs/vue/vue3-code-2.reactive.html
