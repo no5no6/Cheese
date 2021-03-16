@@ -1,7 +1,7 @@
 # Vue 3.0 响应式 API 理解
 + ## 响应式数据
-  - 响应式数据，就是当数据对象改变时（ `set` ），有用到数据对象的地方，都会自动执行响应的逻辑。比如 `effect/computed/watch` 等 `js api` 用到数据对象，则执行对应的回调函数。而视图 `view` 用到数据对象时，则重新 `vnode diff`，最后自动进行dom更新（即视图更新）。  
-  - 而Vue3响应式源码跟 `Vue2.x` 源码流程基本一致，依然是利用在使用响应式数据时，执行数据的 `get` 方法，收集相关的依赖（依赖可以是回调函数，如 `effect/computed` ，也可以是视图自动更新）；在数据进行变化的时候，执行数据的 `set` 方法，把收集的依赖都依次执行。
+  - 响应式数据，就是当数据对象改变时（ `set` ），所有引用该数据的地方，都会自动执行响应的逻辑（副作用）。比如 `effect/computed/watch` 等， `js api` 用到数据对象，则执行对应的回调函数。而视图 `view` 用到数据对象时，则重新 `vnode diff`，最后自动进行dom更新（即视图更新）。  
+  - Vue3响应式源码跟 `Vue2.x` 源码流程基本一致，依然是利用在使用响应式数据时，执行数据的 `get` 方法，收集相关的依赖（依赖可以是回调函数，如 `effect/computed` ，也可以是视图自动更新）；在数据进行变化的时候，执行数据的 `set` 方法，把收集的依赖都依次执行。
 + ## 响应式基础 API
   - ### reactive
     + 重新给 `reactive` 对象赋值，丢失响应式
@@ -300,7 +300,54 @@
 
   - ### shallowRef
     + 创建一个跟踪自身 .value 变化的 ref，但不会使其值也变成响应式的。
+
+      ```html
+        <div id="app">
+          <div>age: {{obj.age}}</div>
+          <button @click.native="handleClick">按钮</button>
+        </div> 
+      ```
+      ```javascript
+        import { createApp, shallowRef, watchEffect } from './node_modules/vue/dist/vue.esm-browser.js'
+
+        const useChange = () => {
+          const obj = shallowRef({age: 1})
+
+          watchEffect(() => {
+            console.log(obj.value, 'watchEffect obj') // 不会打印
+          })
+
+          const handleClick = () => {
+            // 只有这样赋值才能触发响应
+            // obj.value = {age: 100}
+
+            obj.value.age = 100
+            console.log(obj.value.age, 'handleClick obj') // 100
+          }
+
+          return {
+            obj,
+            handleClick
+          }
+        }
+
+        const app = createApp({
+          setup() {
+            return {
+              ...useChange()
+            }
+          }
+        })
+
+        app.mount('#app')
+      ```
+      > + 例子中 `obj` 为浅层响应式对象， 只有对 `obj.value` 直接赋值，才会触发响应
+      > + 点击按钮，更改 `age` 的值为 `100` , 此次更改不会被响应到页面上，页面上 `age` 的值还是 `1`
+      > + `watchEffect` 中的 `console.log` 不会被打印，因为 `age` 属性的改变不是是响应式，所以 `watchEffect` 无法收集到依赖
+
   - ### triggerRef
+    + 手动执行与 `shallowRef` 关联的任何副作用
+      >  上面列子 `handleClick` 里增加 `triggerRef(obj)` 即可让页面和 `watchEffect` 响应到值的变化
 
 + ## Computed 和 Watch
   - ### computed
