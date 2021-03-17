@@ -7,6 +7,23 @@
     + 重新给 `reactive` 对象赋值，丢失响应式
     + `reactive` 返回对象如果解构，会丢失响应式，但可以将需要解构的对象再 `toRefs` 一下，解构后的值就可以变为响应式对象
   - ### readonly
+    + 当需要提供给用户只读数据的时候，可以使用此方法。只读是深层的，任何被嵌套的属性同样也为只读
+      ```javascript
+        const original = reactive({ count: 0 })
+        const copy = readonly(original)
+
+        watchEffect(() => {
+          // 用于响应性追踪
+          console.log(copy.count)
+        })
+
+        // 变更 original 会触发依赖于副本的侦听器
+        original.count++
+
+        // 变更副本将失败并导致警告
+        copy.count++ // 警告!
+      ```
+      > 当 `readonly` 被引用的对象发生改变的时候，`readonly` 对象也会随之改变，同时 `watchEffect` 追踪的 `copy.count` 函数也会执行，如果主动改变 `readonly`对象的值，系统会发出警告。
   - ### isProxy
   - ### isReactive
   - ### isReadonly
