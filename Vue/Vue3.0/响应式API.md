@@ -389,7 +389,6 @@
         const computedNum = computed(() => 2 * count.num)
         count.num = 7
       ```
-
       > 使用 `effect` 或 `computed api` 时，里面使用了 `count.num` ，意味着这个 `effect` 依赖于 `count.num` 。当 `count.num set` 改变值时，需要通知该 `effect` 去执行。创建 `effect` 的回调函数时进行依赖��。如果回调函数中用到响应式数据（意味着会去执行 `get` 函数），则同步这个 `effect` 到响应式数据（这里是 `count.num` ）的依赖集中
 
 > 参考：
