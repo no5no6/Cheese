@@ -368,6 +368,84 @@
 
 + ## Computed 和 Watch
   - ### computed
+    + 使用时需要用 `.value` 操作
+    + 计算属性具有缓存特性
+    + 在调用 `computed` 时，程序首先会判断依赖的值是否改变，如果未改变，直接返回缓存的值，而 `methods` 只要是调用就会执行
+    + `computed` 实际为 `lazy` 的 `effect` 语法糖
+    + 只有 `getter` 方式
+      ```html
+        <div id="app">
+          <div>age: {{countAge}}</div>
+          <button @click.native="handleClick">按钮</button>
+        </div>
+      ```
+      ```javascript
+        import { createApp, reactive, computed } from './node_modules/vue/dist/vue.esm-browser.js'
+
+        const useChange = () => {
+          const obj = reactive({age: 1})
+          const countAge = computed(() => obj.age + 1)
+          const handleClick = () => {
+            obj.age = 5
+          }
+          return {
+            handleClick,
+            countAge
+          }
+        }
+
+        const app = createApp({
+          setup() {
+            return {
+              ...useChange()
+            }
+          }
+        })
+
+        app.mount('#app')
+      ```
+    + `getter` 和 `setter` 方式
+
+      ```html
+        <div id="app">
+          <div>age: {{countAge}}</div>
+          <button @click.native="handleClick">按钮</button>
+        </div>
+      ```
+      ```javascript
+        import { createApp, reactive, computed } from './node_modules/vue/dist/vue.esm-browser.js'
+
+        const useChange = () => {
+          const obj = reactive({age: 1})
+          const countAge = computed({
+            get: () => {
+              return obj.age + 1
+            },
+            set: value => {
+              obj.age = value - 2
+            }
+          })
+          const handleClick = () => {
+            countAge.value = 5
+          }
+
+          return {
+            handleClick,
+            countAge
+          }
+        }
+
+        const app = createApp({
+          setup() {
+            return {
+              ...useChange()
+            }
+          }
+        })
+
+        app.mount('#app')
+
+      ```
   - ### watchEffect
   - ### watch
 
@@ -393,6 +471,5 @@
 
 > 参考：
 > + https://v3.cn.vuejs.org/api/reactivity-api.html
-> + https://lq782655835.github.io/blogs/vue/vue3-code-2.reactive.html#_3-track-trigger
 > + https://zhuanlan.zhihu.com/p/146097763
 > + https://lq782655835.github.io/blogs/vue/vue3-code-2.reactive.html
