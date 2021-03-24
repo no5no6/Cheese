@@ -447,6 +447,43 @@
 
       ```
   - ### watchEffect
+    + 跟踪响应式依赖项时立即执行一个函数（副作用），并在依赖项发生改变时，再次执行此函数
+      ```html
+        <div id="app">
+          <div>age: {{obj.age}}</div>
+          <button @click.native="handleClick">按钮</button>
+        </div>
+      ```
+      ```javascript
+        import { createApp, reactive, watchEffect } from './node_modules/vue/dist/vue.esm-browser.js'
+
+        const useChange = () => {
+          const obj = reactive({age: 1})
+          watchEffect(() => {
+            console.log(obj.age)
+          })
+
+          const handleClick = () => {
+            obj.age = 5
+          }
+
+          return {
+            handleClick,
+            obj
+          }
+        }
+
+        const app = createApp({
+          setup() {
+            return {
+              ...useChange()
+            }
+          }
+        })
+
+        app.mount('#app')
+      ```
+    + 
   - ### watch
 
 + ## track 和 trigger
