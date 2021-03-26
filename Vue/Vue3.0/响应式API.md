@@ -447,7 +447,7 @@
 
       ```
   - ### watchEffect
-    + 跟踪响应式依赖项时立即执行一个函数（副作用），并在依赖项发生改变时，再次执行此函数
+    + 跟踪响应式依赖项时立即执行一次函数（副作用），并在依赖项发生改变时，再次执行此函数
       ```html
         <div id="app">
           <div>age: {{obj.age}}</div>
@@ -493,11 +493,95 @@
       ```
     
     + 侦听器执行异步操作时，有时需要取消副作用，即副作用完成之前数据已改变。侦听副作用传入的函数可以接收一个 `onInvalidate` 函数作为参数，用来注册清理失效时的回调
+      ```html
+        <div id="app">
+          <div>data: {{ data }}</div>
+          <button @click.native="handleClick">按钮</button>
+        </div>
+      ```
+      ```javascript
+        import { createApp, ref, watchEffect } from './node_modules/vue/dist/vue.esm-browser.js'
+
+        const useChange = () => {
+          let id = ref(0)
+          let data = ref(0)
+
+          const getData = id => {
+            return new Promise((resolve) =>{
+              setTimeout(() => {
+                resolve(id)
+              }, 1000)
+            })
+          }
+
+          watchEffect(async onInvalidate => {
+            let status = true
+            onInvalidate(() => status = false)
+
+            if(status)
+            data = await getData(id.value)
+
+            if(status) {
+              // 正常逻辑
+              console.log(data, '成功')
+            }else {
+              // 此次操作已经无效
+              console.log('无效')
+            }
+          })
+          
+          const handleClick = () => {
+            id.value = Math.floor(Math.random() * 10)
+            console.log(id.value, 'click')
+          }
+
+          return {
+            handleClick,
+            data
+          }
+        }
+
+        const app = createApp({
+          setup() {
+            return {
+              ...useChange()
+            }
+          }
+        })
+
+        app.mount('#app')
       ```
 
+    + 侦听器是异步执行的，其副作用是在所有组件 `updated` 生命周期前执行。如果想在 `updated` 之后执行，需要增加 `flush` 属性，设置为 `post`。
+      > `flush` 属性默认值为 `pre` ，还可以设置为 `sync` 同步触发（不建议），这样强制效果始终同步触发
+      ```javascript
+        // 在组件更新后触发，这样你就可以访问更新的 DOM。
+        // 注意：这也将推迟副作用的初始运行，直到组件的首次渲染完成。
+        watchEffect(
+          () => {
+            // 内容
+          },
+          {
+            flush: 'post'
+          }
+        )
       ```
 
-
+    + 侦听器调试
+      - `onTrack` 将在响应式 `property` 或 `ref` 作为依赖项被追踪时被调用。
+      - `onTrigger` 将在依赖项变更导致副作用被触发时被调用。
+      ```javascript
+        watchEffect(
+          () => {
+            /* 副作用 */
+          },
+          {
+            onTrigger(e) {
+              debugger
+            }
+          }
+        )
+      ```
   - ### watch
 
 + ## track 和 trigger
@@ -518,7 +602,7 @@
         const computedNum = computed(() => 2 * count.num)
         count.num = 7
       ```
-      > 使用 `effect` 或 `computed api` 时，里面使用了 `count.num` ，意味着这个 `effect` 依赖于 `count.num` 。当 `count.num set` 改变值时，需要通知该 `effect` 去执行。创建 `effect` 的回调函数时进行依赖��。如果回调函数中用到响应式数据（意味着会去执行 `get` 函数），则同步这个 `effect` 到响应式数据（这里是 `count.num` ）的依赖集中
+      > 使用 `watchEffect` 或 `computed api` 时，里面使用了 `count.num` ，意味着这个 `watchEffect` 依赖于 `count.num` 。当 `count.num set` 改变值时，需要通知该 `watchEffect` 去执行。创建 `watchEffect` 的回调函数时进行依赖��。如果回调函数中用到响应式数据（意味着会去执行 `get` 函数），则同步这个 `watchEffect` 到响应式数据（这里是 `count.num` ）的依赖集中
 
 > 参考：
 > + https://v3.cn.vuejs.org/api/reactivity-api.html
