@@ -281,37 +281,37 @@
 
   - ### customRef
     + 创建一个自定义 `ref`，用户手动操作 `track` 和 `trigger`
-    ```html
-      <input v-model="text" />
-    ```
-    ```javascript
-      function useDebouncedRef(value, delay = 200) {
-        let timeout
-        return customRef((track, trigger) => {
-          return {
-            get() {
-              track()
-              return value
-            },
-            set(newValue) {
-              clearTimeout(timeout)
-              timeout = setTimeout(() => {
-                value = newValue
-                trigger()
-              }, delay)
+      ```html
+        <input v-model="text" />
+      ```
+      ```javascript
+        function useDebouncedRef(value, delay = 200) {
+          let timeout
+          return customRef((track, trigger) => {
+            return {
+              get() {
+                track()
+                return value
+              },
+              set(newValue) {
+                clearTimeout(timeout)
+                timeout = setTimeout(() => {
+                  value = newValue
+                  trigger()
+                }, delay)
+              }
+            }
+          })
+        }
+
+        export default {
+          setup() {
+            return {
+              text: useDebouncedRef('hello')
             }
           }
-        })
-      }
-
-      export default {
-        setup() {
-          return {
-            text: useDebouncedRef('hello')
-          }
         }
-      }
-    ```
+      ```
     + 常见使用场景，防抖操作
     + 通过 `track` 函数记录需要追踪的依赖， 通过 `trigger` 函数通知依赖更新。（详见下方 `track 和 trigger` 内容）
 
