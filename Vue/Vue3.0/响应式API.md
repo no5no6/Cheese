@@ -590,6 +590,7 @@
         <div id="app">
           <div>data: {{ dataRef }}</div>
           <div>dataReactive: {{dataReactive.count}}</div>
+          <div>numbers: {{numbers}}</div>
           <button @click.native="handleClick">按钮</button>
         </div>
       ```
@@ -599,12 +600,17 @@
         const useChange = () => {
           let dataRef = ref(0)
           const dataReactive = reactive({count: 0})
+          const numbers = reactive([1, 2, 3, 4])
 
           watch(dataRef, () => {
             console.log(dataRef.value, 'dateRef change')
           })
 
           watch(() => dataReactive.count, () => {
+            console.log(dataReactive.count, 'dataReactive change')
+          })
+
+          watch(() => [...numbers], () => {
             console.log(dataReactive.count, 'dataReactive change')
           })
           
@@ -616,7 +622,8 @@
           return {
             handleClick,
             dataRef,
-            dataReactive
+            dataReactive,
+            numbers 
           }
         }
 
@@ -629,10 +636,54 @@
         })
 
         app.mount('#app')
+    + 侦听器还可以使用数组同时侦听多个源
+      ```javascript
+        watch([fooRef, barRef], ([foo, bar], [prevFoo, prevBar]) => {
+          /* 副作用 */
+        })
       ```
-  
+    + 副作用函数中注入了新值与旧值。
+      ```javascript
+        watch([firstName, lastName], (newValues, prevValues) => {
+          console.log(newValues, prevValues);
+        })
+      ``` 
+    + 与 watchEffect 相同，拥有与他的 `onInvalidate`、 `flush timing ` 、`debugging` 相同的行为。 
+    + 如果源为深层嵌套，需要使用 `deep` 属性,且值为 `true`
+    
+      ```javascript
+        const state = reactive({ 
+          id: 1, 
+          attributes: { 
+            name: "",
+          },
+        });
 
+        watch(
+          () => state,
+          (state, prevState) => {
+            console.log(
+              "not deep ",
+              state.attributes.name,
+              prevState.attributes.name
+            );
+          }
+        );
 
+        watch(
+          () => state,
+          (state, prevState) => {
+            console.log(
+              "deep ",
+              state.attributes.name,
+              prevState.attributes.name
+            );
+          },
+          { deep: true }
+        );
+
+        state.attributes.name = "Alex";
+      ```
 
 
 + ## track 和 trigger
