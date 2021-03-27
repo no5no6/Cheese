@@ -583,6 +583,57 @@
         )
       ```
   - ### watch
+    + 惰性执行副作用，跟 `watchEffect` 不同，跟踪响应式依赖项时不会立即执行函数，只有依赖项发生改变时，才会执行。
+    + 侦听器数据源可以是具有返回值的 `getter` 函数，也可以是 `ref` 。
+      > 如果需要侦听一个对象的某一个属性，需要使用 `getter` 方式侦听
+      ```html
+        <div id="app">
+          <div>data: {{ dataRef }}</div>
+          <div>dataReactive: {{dataReactive.count}}</div>
+          <button @click.native="handleClick">按钮</button>
+        </div>
+      ```
+      ```javascript
+        import { createApp, ref, reactive, watch } from './node_modules/vue/dist/vue.esm-browser.js'
+
+        const useChange = () => {
+          let dataRef = ref(0)
+          const dataReactive = reactive({count: 0})
+
+          watch(dataRef, () => {
+            console.log(dataRef.value, 'dateRef change')
+          })
+
+          watch(() => dataReactive.count, () => {
+            console.log(dataReactive.count, 'dataReactive change')
+          })
+          
+          const handleClick = () => {
+            dataRef.value = Math.floor(Math.random() * 10)
+            dataReactive.count= Math.floor(Math.random() * 10)
+          }
+
+          return {
+            handleClick,
+            dataRef,
+            dataReactive
+          }
+        }
+
+        const app = createApp({
+          setup() {
+            return {
+              ...useChange()
+            }
+          }
+        })
+
+        app.mount('#app')
+      ```
+  
+
+
+
 
 + ## track 和 trigger
     - `track` 函数用来跟踪收集依赖 `deps`（一般有 `effect` 、 `computed` 、 `watch` 的回调函数）
