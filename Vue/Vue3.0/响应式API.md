@@ -25,8 +25,29 @@
       ```
       > 当 `readonly` 被引用的对象发生改变的时候，`readonly` 对象也会随之改变，同时 `watchEffect` 追踪的 `copy.count` 函数也会执行，如果主动改变 `readonly`对象的值，系统会发出警告。
   - ### isProxy
+    + 检查对象是否由 `reactive` 或 `readonly` 创建的 `proxy` 。
+      > 上述 2 种方式创建的变量，都是使用了 es6 的 `proxy` ，都会被 `proxy` 对象包裹
   - ### isReactive
+    + 检查对象是否是由 reactive 创建的响应式代理。
+      ```javascript
+        const dataReactive = reactive({count: 0})
+        const dataReadOnly = readonly({count: 1})
+
+        console.log(isReactive(dataReactive)) // true
+        console.log(isReactive(dataReadOnly)) // false
+      ```
+    + 如果对象是由 `readonly` 创建，但包裹了由 `reactive`创建的另一个对象，他也会返回 `true`
+      ```javascript
+        const dataReactive = reactive({count: 0})
+        const dataReadonly = readonly(dataReactive)
+        
+        console.log(isReactive(dataReactive)) // true
+        console.log(isReactive(dataReadonly)) // true
+      ```
+
   - ### isReadonly
+    + 检查对象是否是 `readonly` 创建的只读代理
+    
   - ### toRaw
   - ### markRaw
   - ### shallowReactive
