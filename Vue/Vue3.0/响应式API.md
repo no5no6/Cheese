@@ -100,6 +100,33 @@
       ```
 
   - ### markRaw
+    + 让数据永远不会被代理（ `proxy` ），返回对象本身。实际上就是在数据对象上定义 __v_skip 属性，从而跳过代理
+
+      ```javascript
+        const foo = markRaw({})
+        console.log(isReactive(reactive(foo))) // false
+
+        // 嵌套在其他响应式对象中时也可以使用
+        const bar = reactive({ foo })
+        console.log(isReactive(bar.foo)) // false
+      ```
+      > 一般用于：
+      > + 一些应该为响应式的第三方类实例
+      > + 渲染数据不可变的大表格
+    + 需避免**同一性风险**
+      ```javascript
+        const foo = markRaw({
+          nested: {}
+        })
+
+        const bar = reactive({
+          // 虽然 `foo` 被标记为原始，但 foo.nested 不是。
+          nested: foo.nested
+        })
+
+        console.log(foo.nested === bar.nested) // false
+      ```
+      > 如果将嵌套在内的、未标记的原始对象添加进响应式对象，然后再次访问该响应式对象，就会得到原始对象被代理后的版本。这可能会导致同一性风险——即执行一个依赖于对象本身的操作，但同时使用同一对象的原始版本和被代理后的版本
     
   - ### shallowReactive
   - ### shallowReadonly
