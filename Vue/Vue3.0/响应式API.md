@@ -1,4 +1,4 @@
-# Vue 3.0 响应式 API 理解
+# Vue 3.0 响应式 API 整理
 + ## 响应式数据
   - 响应式数据，就是当数据对象改变时（ `set` ），所有引用该数据的地方，都会自动执行响应的逻辑（副作用）。比如 `effect/computed/watch` 等， `js api` 用到数据对象，则执行对应的回调函数。而视图 `view` 用到数据对象时，则重新 `vnode diff`，最后自动进行dom更新（即视图更新）。  
   - Vue3响应式源码跟 `Vue2.x` 源码流程基本一致，依然是利用在使用响应式数据时，执行数据的 `get` 方法，收集相关的依赖（依赖可以是回调函数，如 `effect/computed` ，也可以是视图自动更新）；在数据进行变化的时候，执行数据的 `set` 方法，把收集的依赖都依次执行。
@@ -47,9 +47,60 @@
 
   - ### isReadonly
     + 检查对象是否是 `readonly` 创建的只读代理
-    
+
   - ### toRaw
+    + 获取代理对象的原始对象的引用
+      ```javascript
+        const obj = {count: 0}
+        const dataReactive = reactive(obj)
+        const rawData = toRaw(dataReactive)
+
+        console.log(rawData === dataReactive) // false
+        console.log(rawData === obj)          // true
+      ```
+    + `toRaw` 的对象会失去响应式
+    + 因为获取的是对象的引用，如果被引用的对象发生改变，`toRaw` 的对象也会随之改变
+      ```html
+        <div id="app">
+          <div>rawData: {{rawData.count}}</div>
+          <div>dataReactive: {{ dataReactive.count }}</div>
+          <button @click.native="handleClick">按钮</button>
+        </div>
+      ```
+      ```javascript
+        import { createApp, reactive, toRaw } from './node_modules/vue/dist/vue.esm-browser.js'
+
+        const useChange = () => {
+          const obj = {count: 0}
+          const dataReactive = reactive(obj)
+          const rawData = toRaw(dataReactive)
+
+          const handleClick = () => {
+            dataReactive.count = Math.floor(Math.random() * 10)
+            console.log(dataReactive.count)
+          }
+
+          return {
+            handleClick,
+            rawData,
+            dataReactive
+          }
+        }
+
+        const app = createApp({
+          setup() {
+
+            return {
+              ...useChange()
+            }
+          }
+        })
+        
+        app.mount('#app')
+      ```
+
   - ### markRaw
+    
   - ### shallowReactive
   - ### shallowReadonly
 + ## Refs
