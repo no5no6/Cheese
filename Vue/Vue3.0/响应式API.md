@@ -129,7 +129,38 @@
       ```
       > 如果将嵌套在内的、未标记的原始对象添加进响应式对象，然后再次访问该响应式对象，就会得到原始对象被代理后的版本。这可能会导致同一性风险。
   - ### shallowReactive
+    + 创建一个浅层的响应式代理，只有其第一层属性为响应式，任何嵌套的对象都会暴露为原始值。
+    ```javascript
+      const state = shallowReactive({
+        foo: 1,
+        nested: {
+          bar: 2
+        }
+      })
+
+      // 改变 state 本身的性质是响应式的
+      state.foo++
+      // ...但是不转换嵌套对象
+      isReactive(state.nested) // false
+      state.nested.bar++ // 非响应式
+    ```
   - ### shallowReadonly
+    + 创建一个浅层的代理，只有其第一层属性为只读，任何嵌套的对象都会暴露为原始值。
+    ```javascript
+      const state = shallowReadonly({
+        foo: 1,
+        nested: {
+          bar: 2
+        }
+      })
+
+      // 改变 state 本身的 property 将失败
+      state.foo++
+      // ...但适用于嵌套对象
+      isReadonly(state.nested) // false
+      state.nested.bar++ // 适用
+    ```
+
 + ## Refs
   - ### ref
     + 除了在 `template`  中，使用时需要用 `.value` 操作。
