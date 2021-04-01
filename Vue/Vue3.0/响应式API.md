@@ -130,36 +130,36 @@
       > 如果将嵌套在内的、未标记的原始对象添加进响应式对象，然后再次访问该响应式对象，就会得到原始对象被代理后的版本。这可能会导致同一性风险。
   - ### shallowReactive
     + 创建一个浅层的响应式代理，只有其第一层属性为响应式，任何嵌套的对象都会暴露为原始值。
-    ```javascript
-      const state = shallowReactive({
-        foo: 1,
-        nested: {
-          bar: 2
-        }
-      })
+      ```javascript
+        const state = shallowReactive({
+          foo: 1,
+          nested: {
+            bar: 2
+          }
+        })
 
-      // 改变 state 本身的性质是响应式的
-      state.foo++
-      // ...但是不转换嵌套对象
-      isReactive(state.nested) // false
-      state.nested.bar++ // 非响应式
-    ```
+        // 改变 state 本身的性质是响应式的
+        state.foo++
+        // ...但是不转换嵌套对象
+        isReactive(state.nested) // false
+        state.nested.bar++ // 非响应式
+      ```
   - ### shallowReadonly
     + 创建一个浅层的代理，只有其第一层属性为只读，任何嵌套的对象都会暴露为原始值。
-    ```javascript
-      const state = shallowReadonly({
-        foo: 1,
-        nested: {
-          bar: 2
-        }
-      })
+      ```javascript
+        const state = shallowReadonly({
+          foo: 1,
+          nested: {
+            bar: 2
+          }
+        })
 
-      // 改变 state 本身的 property 将失败
-      state.foo++
-      // ...但适用于嵌套对象
-      isReadonly(state.nested) // false
-      state.nested.bar++ // 适用
-    ```
+        // 改变 state 本身的 property 将失败
+        state.foo++
+        // ...但适用于嵌套对象
+        isReadonly(state.nested) // false
+        state.nested.bar++ // 适用
+      ```
 
 + ## Refs
   - ### ref
@@ -280,57 +280,50 @@
       ```
     + **`toRef` 数据改变，视图不会自动更新**
       ```html
-        <html>
-          <head>
-            <title>vue3.0</title>
-          </head>
-          <body>
-            <div id="app">
-              <div>{{obj.name}}</div>
-              <div>{{toRefName}}</div>
-              <button @click.native="handleClick">按钮</button>
-            </div>
-            
-            <script type="module">
-              import { createApp, toRef } from './node_modules/vue/dist/vue.esm-browser.js'
-
-              const useChange = () => {
-                const obj = {
-                    name: 'jack',
-                    age: 20
-                  }
-                
-                const toRefName = toRef(obj, 'name')
-                
-                console.log(toRefName.value) // jack
-                console.log(obj.name)   // jack
-
-                const handleClick = () => {
-                  obj.name = '我被改变了'
-                  console.log(toRefName.value) // 我被改变了
-                  // 此处视图不会被更新
-                }
-
-                return {
-                  toRefName,
-                  obj,
-                  handleClick
-                }
-              }
-
-              const app = createApp({
-                setup() {          
-                  return {
-                    ...useChange()
-                  }
-                }
-              })
-
-              app.mount('#app')
-            </script>
-          </body>
-        </html>
+        <div id="app">
+          <div>{{obj.name}}</div>
+          <div>{{toRefName}}</div>
+          <button @click.native="handleClick">按钮</button>
+        </div>
       ```
+      ```javascript    
+        import { createApp, toRef } from './node_modules/vue/dist/vue.esm-browser.js'
+
+        const useChange = () => {
+          const obj = {
+              name: 'jack',
+              age: 20
+            }
+          
+          const toRefName = toRef(obj, 'name')
+          
+          console.log(toRefName.value) // jack
+          console.log(obj.name)   // jack
+
+          const handleClick = () => {
+            obj.name = '我被改变了'
+            console.log(toRefName.value) // 我被改变了
+            // 此处视图不会被更新
+          }
+
+          return {
+            toRefName,
+            obj,
+            handleClick
+          }
+        }
+
+        const app = createApp({
+          setup() {          
+            return {
+              ...useChange()
+            }
+          }
+        })
+
+        app.mount('#app')
+       ```
+     
       > 上面例子，在点击按钮后，虽然 `obj` 的 `name` 属性的值被改变，`toRefName` 响应到了 `obj` 的改变，其值也已改变，但是视图模板不会更新
   - ### toRefs
     + 使用时需要用 `.value` 操作
@@ -354,58 +347,51 @@
       ```
     + **同 `toRef` 一样，数据改变，视图不会自动更新**
       ```html
-        <html>
-          <head>
-            <title>vue3.0</title>
-          </head>
-          <body>
-            <div id="app">
-              <div>{{obj.name}}</div>
-              <div>{{refsObj.name.value}}</div>
-              <button @click.native="handleClick">按钮</button>
-            </div>
-            
-            <script type="module">
-              import { createApp, toRefs } from './node_modules/vue/dist/vue.esm-browser.js'
-
-              const useChange = () => {
-                const obj = {
-                    name: 'jack',
-                    age: 20
-                  }
-                
-                const refsObj = toRefs(obj)
-                
-                console.log(refsObj.name.value) // jack
-                console.log(obj.name)   // jack
-
-                const handleClick = () => {
-                  obj.name = '我被改变了'
-                  console.log(obj.name)
-                  console.log(refsObj.name.value) // 我被改变了
-                  // 此处视图不会被更新
-                }
-
-                return {
-                  refsObj,
-                  obj,
-                  handleClick
-                }
-              }
-
-              const app = createApp({
-                setup() {          
-                  return {
-                    ...useChange()
-                  }
-                }
-              })
-
-              app.mount('#app')
-            </script>
-          </body>
-        </html>
+        <div id="app">
+          <div>{{obj.name}}</div>
+          <div>{{refsObj.name.value}}</div>
+          <button @click.native="handleClick">按钮</button>
+        </div>
       ```
+      ```javascript
+        import { createApp, toRefs } from './node_modules/vue/dist/vue.esm-browser.js'
+
+        const useChange = () => {
+          const obj = {
+              name: 'jack',
+              age: 20
+            }
+          
+          const refsObj = toRefs(obj)
+          
+          console.log(refsObj.name.value) // jack
+          console.log(obj.name)   // jack
+
+          const handleClick = () => {
+            obj.name = '我被改变了'
+            console.log(obj.name)
+            console.log(refsObj.name.value) // 我被改变了
+            // 此处视图不会被更新
+          }
+
+          return {
+            refsObj,
+            obj,
+            handleClick
+          }
+        }
+
+        const app = createApp({
+          setup() {          
+            return {
+              ...useChange()
+            }
+          }
+        })
+
+        app.mount('#app')
+      ```
+      
   - ### isRef
     + 检查一个值是否是 `ref`，根据 `__v_isRef` 属性值来确定
 
