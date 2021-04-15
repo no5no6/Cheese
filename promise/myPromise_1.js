@@ -35,6 +35,7 @@ const REJECTED = 'rejected'  // 失败
       if(this.status === PENDING ) {
         this.status = FULFILLED
         this.value = value
+      }
     }
 
     reject = reason => {
@@ -51,6 +52,6 @@ const REJECTED = 'rejected'  // 失败
         failCallback(this.reason)
       }
     }
- }
+  }
 
  module.exports = MyPromise
