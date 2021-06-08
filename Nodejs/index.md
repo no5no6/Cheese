@@ -25,3 +25,31 @@
       + 直接操作数据库，搭建高效、轻量的 API 服务 （不关注大量业务逻辑的情况下）
       + 实时聊天程序
       + 前端工程化
+
+  + ### 全局对象
+    -  `__filename`  返回正在执行文件绝对路径
+    - `__dirname` 返回正在执行文件所在目录
+    - `timer` 执行顺序与实践循环的关系
+    - `process` 提供与当前进程互动接口
+      + 内存信息 `process.memoryUsage()`
+      + cpu 信息 `process.cpuUsage()`
+      + 当前工作目录 `process.cwd()`
+      + 版本信息 `process.version`
+      + cpu 架构 `process.arch`
+      + 环境
+        - 当前环境 `process.env.NODE_ENV`
+        - 系统环境变量 `process.env.PATH`
+      + 系统平台 `process.platform`
+      + 执行参数 `process.argv`
+      + 获取 pid `process.pid`
+      + 运行时间 `process.uptime()`
+      + 监听时间
+        - 退出时执行 `process.on('exit', () => {})`
+          > `exit` 事件里只能写同步代码
+        - 退出前执行 `process.on('beforeExit', () => {})`
+      + 退出进程 `process.exit()`
+      + 流操作
+        - 输出 `process.stdout`
+        - 输入 `process.stdin`
+    - `require` 加载模块
+    - `module`、`exports` 模块导出
