@@ -43,7 +43,7 @@
       + 执行参数 `process.argv`
       + 获取 pid `process.pid`
       + 运行时间 `process.uptime()`
-      + 监听时间
+      + 监听事件
         - 退出时执行 `process.on('exit', () => {})`
           > `exit` 事件里只能写同步代码
         - 退出前执行 `process.on('beforeExit', () => {})`
@@ -53,3 +53,41 @@
         - 输入 `process.stdin`
     - `require` 加载模块
     - `module`、`exports` 模块导出
+    - `path` 文件/目录的路径
+      + 路径基础名称 `path.basename()`
+      + 获取路径中目录名称 `path.dirname()`
+      + 获取目录中扩展名称 `path.extname()`
+      + 获取路径是否是绝对路径 `path.isAbsolute()`
+      + 拼接多个路径 `path.join()`
+      + 返回绝对路径 `resolve()`
+      + 解析路径 `path.pasre()`
+      + 序列化路径（与解析相反） `path.format()`
+      + 规范化路径 `path.normalize()`
+    - `Buffer` 缓存区（使用 js 操作二进制数据）
+      + `alloc` 创建制定空间大小的 `buffer`
+        
+        ```js
+          const b = Buffer.alloc(10)
+        ```
+      + `allocUnsafe` 创建制定大小的 `buffer` (不安全)。利用碎片化空间。
+        
+        ```js
+          const b2 = Buffer.allocUnsafe(10)
+        ```
+      + `from` 接收数据，创建 `buffer`，
+        
+        ```js
+          const b3 = Buffer.from('1')
+        ```
+      + 实例方法
+        - `fill` : 使用数据填充 `buffer`
+        - `write` : 向 `buffer` 中写入数据
+        - `toString` : 从 `buffer` 中提取数据
+        - `slice` : 截取 `buffer`
+        - `indexOf` : 在 `buffer` 中查找数据
+        - `copy` : 拷贝 `buffer` 中的数据
+      + 静态方法
+        - `concat` : 将多个 `buffer` 拼接成一个 `buffer`
+        - `isBuffer` : 判断当前数据是否为 `buffer`
+      + `FS` 文件操作模块
+        
