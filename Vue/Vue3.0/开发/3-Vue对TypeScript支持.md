@@ -36,17 +36,30 @@
   </template>
 ```
 
-### 3. 联合类型会遇到的问题
-```vue
-  <script setup lang="ts">
-  let x: string | number = 1
-  </script>
+### 3. 在使用了` <script lang="ts">` 或 `<script setup lang="ts">` 后，`<template>` 在绑定表达式中也支持 TypeScript  
+  假设：
+  ```vue
+    <script setup lang="ts">
+    let x: string | number = 1
+    </script>
 
-  <template>
-    <!-- 出错，因为 x 可能是字符串 -->
-    {{ x.toFixed(2) }}
-  </template>
-```
+    <template>
+      <!-- 出错，因为 x 可能是字符串 -->
+      {{ x.toFixed(2) }}
+    </template>
+  ```
+  > 因为不能推测出 `x` 的具体类型，所以不管是 `String` 或 `Number` 的方法都会出错  
+
+  可以使用内联类型强制转换解决此问题：
+  ```vue
+    <script setup lang="ts">
+    let x: string | number = 1
+    </script>
+
+    <template>
+      {{ (x as number).toFixed(2) }}
+    </template>
+  ```
 
 
 
