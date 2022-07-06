@@ -1,6 +1,6 @@
 # 配置 TSX
 
-+ ### 安装插件
++ ### 安装
   `yarn add -D @vitejs/plugin-vue-jsx`
 
 + ### 配置
