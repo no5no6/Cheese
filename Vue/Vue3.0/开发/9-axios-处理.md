@@ -34,13 +34,41 @@
     }
   ```
 
++ ### 创建环境变量
+  - 项目根目录下创建 .env.development 文件，添加如下配置：  
+
+    ```
+      VITE_API_HOST = http://localhost:8080
+    ```
+
+  - 项目根目录下创建 .env.production 文件，添加如下配置：  
+
+    ```
+      VITE_API_HOST = http://baidu.com
+    ```
+
+    > `Vite` 要求自定义变量需使用 `VITE_` 开头  
+
+  - 打开 `src/env.d.ts` 文件，为自定义的环境变量添加类型说明：  
+  
+    ```typescript
+      // 其他代码...
+      // eslint-disable-next-line no-unused-vars
+      interface ImportMetaEnv {
+        readonly VITE_API_BASEURL: string
+        // 更多环境变量...
+      }
+    ```
+
+    > 因为 `ImportMetaEnv` 接口没有使用或导出，只为给 `vite` 自定义变量声明类型，所以用单行注释方式让 `eslint` 忽略这个对象。
+
 + ### `utils/request.ts` 配置  
 
   ```typescript
     import axios， { AxiosRequestConfig } from 'axios'
 
     const request = axios.create({
-      baseURL: 'https://api.example.com'
+      baseURL: import.meta.env.VITE_API_HOST
     });
 
     // Add a request interceptor
