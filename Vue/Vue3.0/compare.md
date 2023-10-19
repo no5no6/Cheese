@@ -3,22 +3,22 @@
   > + [最新 RFC](https://v3.vuejs.org/guide/composition-api-introduction.html#reactive-variables-with-ref)
 一. Vue 与 Vue 3.0
   + 响应式系统升级
-    - vue 2.0 中 响应式系统的核心是 `defineProperty`，在初始化的时会遍历 `data` 中所有成员，通过 `defineProperty` 把对象的属性转换成 `setter` 和 `getter`，如果对象的属性也是对象的话，需要递归遍历处理每一个子对象的属性。  
+    - Vue 2.0 中 响应式系统的核心是 `defineProperty`，在初始化的时会遍历 `data` 中所有成员，通过 `defineProperty` 把对象的属性转换成 `setter` 和 `getter`，如果对象的属性也是对象的话，需要递归遍历处理每一个子对象的属性。  
       > + 因为以上操作都是在项目初始化中做的，所以会导致没有使用到的属性也被处理，增加了初始化时候的消耗
       > + 如果想动态对对象添加响应式属性需要使用 `$set`
       > + 并且 `defineProperty` 对一数组的方法，也无法监听到（如删除，下标操作，length赋值）
 
-    - vue 3.0 使用 `es6` 中的 `proxy` 和 `Reflect` 重写了响应式系统, `proxy` 的性能优于 `defineProperty` ，`proxy` 对象可以拦截属性的访问，赋值，删除等操作，不需要初始化时遍历所有属性，如果有多层属性嵌套的话，只有访问某个属性的时候才会递归处理下一级属性。
+    - Vue 3.0 使用 `Proxy API` 和 `Reflect` 对象重写了响应式系统, `proxy` 的性能优于 `defineProperty` ，`proxy` 对象可以拦截属性的访问，赋值，删除等操作，不需要初始化时遍历所有属性，如果有多层属性嵌套的话，只有访问某个属性的时候才会递归处理下一级属性。
       + 可动监听动态新增的属性
       + 可监听删除属性
       + 可监听数组索引和 `length` 属性
       + 可作为模块单独使用
 
   + 编译优化
-    - vue 2.0 中通过标记静态根节点，从而优化 `diff` 的过程。
+    - Vue 2.0 中通过标记静态根节点，从而优化 `diff` 的过程。
       > 静态节点还会被 `diff`
 
-    - vue 3.0 中标记和提升所有静态节点，`diff` 时只需要对比动态节点的内容。
+    - Vue 3.0 中标记和提升所有静态节点，`diff` 时只需要对比动态节点的内容。
       + fragments（片段）
         > 模板中不需要创建一个唯一的根节点（需要升级 vetur 插件）
 
@@ -33,7 +33,7 @@
         > 在将模板编译为 render 函数时，会将事件处理函数做缓存
 
   + 源码体积优化
-    - vue 3.0 中移除了一些不常用的 API
+    - Vue 3.0 中移除了一些不常用的 API
       > 例如：inline-template，filter 等
     - Tree-sharking
       > 依赖 `es modules` 通过编译过程中的静态分析，找到没有引入的模块，在打包时候直接过滤掉，从而使打包体积更小。
@@ -46,7 +46,7 @@
       + 缺点： 同一个选项的代码会被拆分到不同的选项当中，对于后期维护和可读性造成一些困扰。
 
   + Composition API
-    - vue 3.0 中新增的一组 API
+    - Vue 3.0 中新增的一组 API
     - 一组基于函数的 API
     - 可以更灵活组织组件的逻辑
   
