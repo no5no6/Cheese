@@ -1,7 +1,7 @@
 # Vue 3.0 与 Vue 2.0 对比
   > + [Vue Function-based API RFC](https://zhuanlan.zhihu.com/p/68477600)（老版本，具有参考价值）  
   > + [最新 RFC](https://v3.vuejs.org/guide/composition-api-introduction.html#reactive-variables-with-ref)
-一. Vue 与 Vue 3.0
+一. Vue 2.0 与 Vue 3.0
   + 响应式系统升级
     - Vue 2.0 中 响应式系统的核心是 `defineProperty`，在初始化的时会遍历 `data` 中所有成员，通过 `defineProperty` 把对象的属性转换成 `setter` 和 `getter`，如果对象的属性也是对象的话，需要递归遍历处理每一个子对象的属性。  
       > + 因为以上操作都是在项目初始化中做的，所以会导致没有使用到的属性也被处理，增加了初始化时候的消耗
@@ -13,6 +13,20 @@
       + 可监听删除属性
       + 可监听数组索引和 `length` 属性
       + 可作为模块单独使用
+
+  + 生命周期对比
+    |   Vue 2.0         |   Vue 3.0          | 描述       |
+    | :-----------------| :------------------| :-------- |
+    |    beforeCreate   |   setup            |           |
+    |    created        |   setup            |           |
+    |    beforeMount    |   onBeforeMount    |           |
+    |    mounted        |   onMounted        |           |
+    |    beforeUpdate   |   onBeforeUpdate   |           |
+    |    updated        |   onUpdated        |           |
+    |    beforeDestroy  |   onBeforeUnMount  |           |
+    |    destroyed      |   onUnMounted      |           |
+    |    errorCaptured  |   onErrorCaptured  |           |
+    
 
   + 编译优化
     - Vue 2.0 中通过标记静态根节点，从而优化 `diff` 的过程。
