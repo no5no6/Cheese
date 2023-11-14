@@ -1,4 +1,3 @@
-const { resolve } = require('../../../../Downloads/01-01-study -materials/01-01-codes/01-01-03-01-my-promise/myPromise')
 const MyPromise = require('./myPromise')
 
 let p1 = new Promise(
