@@ -1,6 +1,6 @@
 const MyPromise = require('./myPromise')
 
-let p1 = new Promise(
+let p1 = new MyPromise(
     (resolve, reject) => {
       setTimeout(() => {
         resolve('success')

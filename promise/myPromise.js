@@ -20,56 +20,56 @@
  *    （2）异步情况，需要把成功和失败的函数都储存到数组中，呆状态改变时候调用对应的函数。
  *  12. 实现 then 方法的链式调用
  */
-const PENDING = 'pending'  // 等等带
-const FULFILLED = 'fulfilled'  // 成功
-const REJECTED = 'rejected'  // 失败
-class MyPromise {
-  constructor(executor) {
-    try {
-       executor(this.resolve, this.reject)
-    } catch (error) {
+// const PENDING = 'pending'  // 等等带
+// const FULFILLED = 'fulfilled'  // 成功
+// const REJECTED = 'rejected'  // 失败
+// class MyPromise {
+//   constructor(executor) {
+//     try {
+//        executor(this.resolve, this.reject)
+//     } catch (error) {
 
-    }
-  }
+//     }
+//   }
       
-  status= PENDING
-  value = undefined  // 成功结果
-  reason = undefined  // 失败原因
-  successCallback = [] // 成功回调函数
-  failCallback = []  // 失败回调函数
+//   status= PENDING
+//   value = undefined  // 成功结果
+//   reason = undefined  // 失败原因
+//   successCallback = [] // 成功回调函数
+//   failCallback = []  // 失败回调函数
   
-  resolve = value => {
-    if(this.status === PENDING ) {
-      this.status = FULFILLED
-      this.value = value
-      // this.successCallback && this.successCallback()
-      while(this.successCallback.length) this.successCallback.shift()(this.value)
-    }
-  }
+//   resolve = value => {
+//     if(this.status === PENDING ) {
+//       this.status = FULFILLED
+//       this.value = value
+//       // this.successCallback && this.successCallback()
+//       while(this.successCallback.length) this.successCallback.shift()(this.value)
+//     }
+//   }
 
-  reject = reason => {
-    if(this.status === PENDING) {
-      this.status === REJECTED
-      this.reason = reason
-      // this.failCallback && this.failCallback()
-      while(this.failCallback.length) this.failCallback.shift()(this.reason)
-    }
-  }
+//   reject = reason => {
+//     if(this.status === PENDING) {
+//       this.status === REJECTED
+//       this.reason = reason
+//       // this.failCallback && this.failCallback()
+//       while(this.failCallback.length) this.failCallback.shift()(this.reason)
+//     }
+//   }
 
-  then (successCallback, failCallback) {        
-    let promise2 =  new MyPromise(resolve => {
-       if(this.status === FULFILLED) {
-         let returnValue = successCallback(this.value)
-         resolve(returnValue)
-       }else if (this.status === REJECTED) {
-         failCallback(this.reason)
-       }else {
-         this.successCallback.push(successCallback)
-         this.failCallback.push(failCallback) 
-       }
-    }) 
-    return promise2
-  }
-}
+//   then (successCallback, failCallback) {        
+//     let promise2 =  new MyPromise(resolve => {
+//        if(this.status === FULFILLED) {
+//          let returnValue = successCallback(this.value)
+//          resolve(returnValue)
+//        }else if (this.status === REJECTED) {
+//          failCallback(this.reason)
+//        }else {
+//          this.successCallback.push(successCallback)
+//          this.failCallback.push(failCallback) 
+//        }
+//     }) 
+//     return promise2
+//   }
+// }
 
-module.exports = MyPromise
+// module.exports = MyPromise
